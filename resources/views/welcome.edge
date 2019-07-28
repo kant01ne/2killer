@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Da Killer</title>
+  {{ style('style') }}
+</head>
+<body>
+  <section>
+    @if(isGameOwner && !startedAt)
+      <div class="title">Share this link with your friends to get started</div>
+      <div class="subtitle">{{link}}</div>
+    @endif
+
+    @if(!isKillOwner)
+      <div class="logo"></div>
+      <div class="title">You don't have friends at war</div>
+    @endif
+
+    @if(!startedAt && killers)
+      <ul>
+        @each(killer in killers)
+          <li class="subtitle">{{killer}}</li>
+        @endeach
+      </ul>
+    @endif
+
+    @if(kill)
+      <div class="subtitle">Your kill: {{kill.description}}</div>
+      <div class="subtitle">Your victim: {{victim.username}}</div>
+    @endif
+
+    @if(!isKillOwner)
+
+      <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
+        <label class="field a-field a-field_a2 page__field">
+          <input class="field__input a-field__input" name="description" placeholder="Handstand on the beach" required/>
+          <span class="a-field__label-wrap">
+            <span class="a-field__label">Your kill</span>
+          </span>
+        </label>  
+        @if(!username)
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="username" placeholder="BonFamin42" type="text" required/>
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Username</span>
+            </span>
+          </label>
+        @endif
+        {{ csrfField() }}
+        <input hidden name="id" value="{{ game.id }}"/>
+        <label class="field a-field a-field_a2 page__field">
+          <input type="submit" class="startButton" value="Start"/>
+        </label>  
+      </form>
+      <div class="subtitle">
+        <p>
+          Don't know where to start? Read our <a href="/docs">How To Play</a> guide.
+        </p>
+      </div>
+    @endif
+
+    @if(!isGameOwner && !startedAt && isKillOwner)
+      @if(killers.length < minPlayers)
+        <div class="subtitle">Waiting for at least {{minPlayers - killers.length}} more people to join...</div>
+      @else
+        <div class="subtitle">Waiting for game owner to start the game...</div>
+      @endif
+    @endif
+
+    @if(isGameOwner && !startedAt)
+      <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
+        {{ csrfField() }}
+        <input hidden name="id" value="{{ game.id }}"/>
+        <label class="field a-field a-field_a2 page__field">
+            @if(killers.length < 3)  
+        <input type="submit" class="startButton" value="Waiting for at least {{3 - killers.length}} more people to join" disabled />
+            @else
+            <input type="submit" class="startButton" value="Ready" />
+            @endif
+        </label>  
+      </form>
+    @endif
+    
+  </section>
+</body>
+</html>
