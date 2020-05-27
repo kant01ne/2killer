@@ -1,7 +1,7 @@
 {
   "name": "adonis-fullstack-app",
-  "version": "4.1.0",
-  "adonis-version": "4.1.0",
+  "version": "4.1.5",
+  "adonis-version": "4.1.5",
   "description": "The fullstack application boilerplate for Adonisjs",
   "main": "index.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "async": "^3.1.0",
     "domains": "^1.1.4",
     "mssql": "^5.1.0",
+    "mysql": "^2.18.1",
     "underscore": "^1.9.1"
   },
   "devDependencies": {},

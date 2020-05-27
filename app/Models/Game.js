@@ -3,6 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 const Kill = use('App/Models/Kill')
+const User = use('App/Models/User')
 const crypto = require('crypto')
 const Env = use('Env')
 const _ =require('underscore');
@@ -48,37 +49,40 @@ class Game extends Model {
     }
 
     async start () {
-        if (this.started_at)
-            return true;
+        try {
+            console.log("Started At", this.started_at)
+            if (this.started_at)
+                return true;
 
-        let killers = _.shuffle((await this.killers().fetch()).rows);
-        if (killers.length < minPlayers) // Minimum of players
-            return false;
+            // Fetch all kills, shuffle.
+            let kills = await _.shuffle((await this.kills().fetch()).rows);
+            // Fetch Killers, in same order.
+            let players = await Promise.all(kills.map(kill => User.find(kill.user_id)))
 
-        let kills = _.shuffle((await this.kills().fetch()).rows);
-        // Pre compute data: Re-order kills so that killers[i].id !== kills[i].user_id
-        killers.map((killer, i) => {
-            // If not own kill, return.
-            if (kills[i].owner_id !== killer.id)
-                return;
-            
-            // Otherwise, swap with next. TODO Edge Case here when swapping with first item [0]
-            kills.swap(i, (i+1) % kills.length);
-        })
+            // Choose a random step for killers and victim.
+            // Make sure they are different from each other.
+            // Make sure they are different from 0 => Avoid Own Kill or Victim's kill.
+            const killerStep = Math.floor(Math.random() * players.length - 2) + 1;
+            let victimStep;
+            do {
+                victimStep = Math.floor(Math.random() * players.length - 2) + 1
+            } while (victimStep === killerStep)
 
-        // Assign killers.
-        Promise.all(killers.map(async (killer, i) => {
-            await kills[i].killer().associate(killer)
-        }));
+            // Assign killers and victims to kills.
+            await Promise.all(kills.map((kill, i) => {
+                const victimId = (i + victimStep) % players.length;
+                const killerId = (i + killerStep) % players.length;
+                return Promise.all([
+                    kills[i].killer().associate(players[killerId]).catch(console.log),
+                    kills[i].victim().associate(players[victimId]).catch(console.log)
+                ]);
+            }));
 
-        // Assign victims.
-        await Promise.all(killers.map(async (killer, i) => {
-            const victim = i > 0 ? killers[i - 1] : killers[killers.length - 1];
-            await kills[i].victim().associate(victim).catch(e => console.log(e));
-        }));
-
-        this.started_at = new Date();
-        return await this.save();
+            this.started_at = new Date();
+            return await this.save();
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     encrypt () {

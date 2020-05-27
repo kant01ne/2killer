@@ -9,12 +9,12 @@
   <section>
     @if(isGameOwner && !startedAt)
       <div class="title">Share this link with your friends to get started</div>
-      <div class="subtitle">{{link}}</div>
+      <div class="subtitle">http://{{link}}</div>
     @endif
 
     @if(!isKillOwner)
       <div class="logo"></div>
-      <div class="title">You don't have friends at war</div>
+      <div class="title">Start a killer game role play without game owner.</div>
     @endif
 
     @if(!startedAt && killers)
@@ -55,7 +55,6 @@
       </form>
       <div class="subtitle">
         <p>
-          Don't know where to start? Read our <a href="/docs">How To Play</a> guide.
         </p>
       </div>
     @endif

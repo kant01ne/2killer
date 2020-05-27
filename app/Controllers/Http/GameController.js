@@ -40,13 +40,20 @@ class GameController {
     }
 
     async index ({params , auth, request, view}) {
-        // Existing Game.
+        // No game.
+        if (!params.encrypted)
+            return view.render('welcome', {
+                username: auth.user.username,
+            })
+
+        // Otherwise, load existing Game.
         const game = await Game.findFromEncrypted(params.encrypted.toString());
         const killers = (await game.killers().fetch()).rows;
         const kills = (await game.kills().fetch()).rows;
         const kill =  _(kills.map(k => k.toJSON())).findWhere({killer_id: auth.user.id});
         const isKillOwner =  Boolean(_(killers.map(k => k.toJSON())).findWhere({id: auth.user.id}));
         const victim = kill ? await User.find(kill.victim_id) : null;
+
         return view.render('welcome', {
             game: game.toJSON(),
             username: auth.user.username,

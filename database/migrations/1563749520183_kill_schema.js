@@ -11,7 +11,7 @@ class KillSchema extends Schema {
       table.integer('victim_id').unsigned().references('id').inTable('users')
       table.integer('game_id').unsigned().references('id').inTable('games')
       table.unique(['game_id', 'user_id'])
-      table.string('description', 80).notNullable()
+      table.string('description', 1200).notNullable()
       table.increments()
       table.timestamps()
     })
