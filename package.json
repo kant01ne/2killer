@@ -28,6 +28,7 @@
     "@adonisjs/shield": "^1.0.8",
     "async": "^3.1.0",
     "domains": "^1.1.4",
+    "lodash": "^4.17.15",
     "mssql": "^5.1.0",
     "mysql": "^2.18.1",
     "underscore": "^1.9.1"
