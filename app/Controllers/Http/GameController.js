@@ -53,7 +53,11 @@ class GameController {
         const kill =  _(kills.map(k => k.toJSON())).findWhere({killer_id: auth.user.id});
         const isKillOwner =  Boolean(_(killers.map(k => k.toJSON())).findWhere({id: auth.user.id}));
         const victim = kill ? await User.find(kill.victim_id) : null;
+        
 
+        let mobile = false;
+        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(request.headers()['user-agent']))
+            mobile = true;
         return view.render('welcome', {
             game: game.toJSON(),
             username: auth.user.username,
@@ -64,7 +68,8 @@ class GameController {
             startedAt: game.started_at,
             victim,
             isKillOwner,
-            kill
+            kill,
+            mobile
         })
     }
 }

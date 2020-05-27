@@ -8,8 +8,23 @@
 <body>
   <section>
     @if(isGameOwner && !startedAt)
-      <div class="title">Share this link with your friends to get started</div>
+      <div class="title">Share this link with your friends to get started:</div>
       <div class="subtitle">http://{{link}}</div>
+      <br/>
+
+      <a class="whatsapp" href="https://api.whatsapp.com/send?text=http://{{link}}" data-action="share/whatsapp/share"><img src="/whatsapp.svg" /></a>
+      </br>
+
+      @if(mobile)
+        <a href="fb-messenger://share?link=http://{{link}}"><img src="/messenger.png"/></a>
+      @endif
+      
+      @if(!mobile)
+        <a href="http://www.facebook.com/dialog/send?app_id=582407492655263&link=http://{{link}}&redirect_uri=http://{{link}}"><img src="/messenger.png"></a>
+      @endif
+
+      
+      </hr>
     @endif
 
     @if(!isKillOwner)

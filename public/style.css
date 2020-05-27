@@ -38,6 +38,11 @@ section:before {
   z-index: -1;
 }
 
+.whatsapp {
+  content: "";
+  background: url("/whatsapp.svg") no-repeat;
+  background-size: 100%;
+}
 .logo {
   background: url("/logo.svg") no-repeat;
   width: 36px;
