@@ -1,10 +1,10 @@
 'use strict'
-var _ = require('lodash')
+var _ = require('underscore')
 
 class Assignment {
   constructor(...players) {
-    this.players = _.shuffle(_.flatMap(players, (p) => new Player(p.name, p.ownKill)))
-    this.kills = _.flatMap(this.players, (p) => p.ownKill)
+    this.players = _.shuffle(_.map(players, (p) => new Player(p.name, p.ownKill)))
+    this.kills = _.map(this.players, (p) => p.ownKill)
   }
 
   assign() {
@@ -16,7 +16,11 @@ class Assignment {
       return this.players
     }
 
+    // If 1 kill left, it means one victim is left, which is also the first person to have been
+    // assigned a victim (meaning it is the first grandkiller).
     var victim = _.find(this.players, (v) => (this.kills.length === 1) || (v.name !== killer.name && !v.has_a_killer() && !_.includes(killer.grandKillers, v)))
+
+    // Select a kill that is not the killer's or the victim's own kills.
     var kill = _.find(this.kills, (k) => k != killer.ownKill && k != victim.ownKill)
     if (kill === undefined) kill = this.kills[0]
 
@@ -29,7 +33,7 @@ class Assignment {
       console.log(`!! killer's own kill !! killer=${killer.name} kill=${kill} victim=${victim.name}`)
       var vkill = victim.assignedKill
       victim.assignedKill = kill
-      _.remove(this.kills, (e) => e === kill)
+      this.kills = _.without(this.kills, kill)
       kill = vkill
       console.log(victim.toString())
       // The previous case assumes the victim (A) has an assigned kill. If this is not the case, we
@@ -48,17 +52,20 @@ class Assignment {
       console.log(`!! victim's own kill !! killer=${killer.name} kill=${kill} victim=${victim.name}`)
       var kkill = killer.killer.assignedKill
       killer.killer.assignedKill = kill
-      _.remove(this.kills, (e) => e === kill)
+      this.kills = _.without(this.kills, kill)
       kill = kkill
       console.log(killer.killer.toString())
     }
 
+    // Add the killer and all the killer's grandkillers to the killer's victim grand killers
     victim.grandKillers = [...victim.grandKillers, ...killer.grandKillers, killer]
     victim.killer = killer
     killer.assignedKill = kill
     killer.victim = victim
-    _.remove(this.kills, (e) => e === kill)
+    this.kills = _.without(this.kills, kill)
     console.log(killer.toString())
+
+    // Assign a victim to the killer's victim
     this.assignK(killer.victim)
   }
 }
