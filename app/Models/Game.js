@@ -58,7 +58,7 @@ class Game extends Model {
             let kills = (await this.kills().fetch()).rows
             console.log("kills = ")
             console.log(kills)
-            let params = await _.map(kills, (k) => {return { name: k.user_id.toString(), ownKill: k.id.toString() }})
+            let params = await _.map(kills, (k) => {return { id: k.user_id, ownKillId: k.id }})
             let assignment = new Assignment(params)
             let players = assignment.assign()
 

@@ -5,8 +5,8 @@ const Model = use('Model')
 class Assignment extends Model {
   constructor(players) {
     super()
-    this.players = _.shuffle(_.map(players, (p) => new Player(p.name, p.ownKill)))
-    this.kills = _.map(this.players, (p) => p.ownKill)
+    this.players = _.shuffle(_.map(players, (p) => new Player(p.id, p.ownKillId)))
+    this.kills = _.map(this.players, (p) => p.ownKillId)
   }
 
   assign() {
@@ -14,9 +14,9 @@ class Assignment extends Model {
 
     let res = _.map(this.players, (p) => {
       return {
-        victimId: parseInt(p.victim.name),
-        killerId: parseInt(p.killer.name),
-        killId: parseInt(p.assignedKill)
+        victimId: p.victim.id,
+        killerId: p.killer.id,
+        killId: p.assignedKill
       }
     })
 
@@ -79,9 +79,9 @@ class Assignment extends Model {
       return this.players
     }
 
-    var victim = _.find(this.players, (v) => (this.kills.length === 1) || (v.name !== killer.name && !v.has_a_killer() && !_.includes(killer.grandKillers, v)))
+    var victim = _.find(this.players, (v) => (this.kills.length === 1) || (v.id !== killer.id && !v.has_a_killer() && !_.includes(killer.grandKillers, v)))
 
-    var kill = _.find(this.kills, (k) => k != killer.ownKill && k != victim.ownKill)
+    var kill = _.find(this.kills, (k) => k != killer.ownKillId && k != victim.ownKillId)
     if (kill === undefined) kill = this.kills[0]
 
     // Case where remaining kill is the killer's (KD) :
@@ -89,8 +89,8 @@ class Assignment extends Model {
     // We can't assign KD above. We swap KD with the victim's (A) assigned kill (KC). We know that KC is
     // neither D's kill nor A's kill.
     // Result: (A) -> KD -> (B) -> KA -> (C) -> KB -> (D) -> KC -> (A) 
-    if (killer.ownKill === kill && victim.victim != undefined) {
-      console.log(`!! killer's own kill !! killer=${killer.name} kill=${kill} victim=${victim.name}`)
+    if (killer.ownKillId === kill && victim.victim != undefined) {
+      console.log(`!! killer's own kill !! killer=${killer.id} kill=${kill} victim=${victim.id}`)
       var vkill = victim.assignedKill
       victim.assignedKill = kill
       this.kills = _.without(this.kills, kill)
@@ -98,9 +98,9 @@ class Assignment extends Model {
       console.log(victim.toString())
       // The previous case assumes the victim (A) has an assigned kill. If this is not the case, we
       // take the next kill on the list (which is necessarily the victim's kill).
-    } else if (killer.ownKill === kill) {
+    } else if (killer.ownKillId === kill) {
       kill = this.kills[1]
-      console.log(`!! killer's own kill !! no victim yet for the current victim ${victim.name} - newKill = ${kill}`)
+      console.log(`!! killer's own kill !! no victim yet for the current victim ${victim.id} - newKill = ${kill}`)
     }
 
     // Ex where remaining kill is the victim's (KA) :
@@ -108,8 +108,8 @@ class Assignment extends Model {
     // We can't assign KD above. So we swap KA with D's killer's (C) kill (KB). We know that KB is not
     // D's kill nor A's kill.
     // Result: (A) -> KC -> (B) -> KD -> (C) -> KA -> (D) -> KB -> (A) 
-    if (victim.ownKill === kill) {
-      console.log(`!! victim's own kill !! killer=${killer.name} kill=${kill} victim=${victim.name}`)
+    if (victim.ownKillId === kill) {
+      console.log(`!! victim's own kill !! killer=${killer.id} kill=${kill} victim=${victim.id}`)
       var kkill = killer.killer.assignedKill
       killer.killer.assignedKill = kill
       this.kills = _.without(this.kills, kill)
@@ -129,9 +129,9 @@ class Assignment extends Model {
 }
 
 class Player {
-  constructor(name, ownKill) {
-    this.name = name
-    this.ownKill = ownKill
+  constructor(id, ownKillId) {
+    this.id = id
+    this.ownKillId = ownKillId
     this.grandKillers = []
     this.killer = null
     this.victim = null
@@ -143,21 +143,21 @@ class Player {
   }
 
   toString() {
-    return `${this.name} -> ${this.assignedKill} -> ${this.victim.name}`
+    return `${this.id} -> ${this.assignedKill} -> ${this.victim.id}`
   }
 }
 
 //var params = [
 //]
 //var r = new Assignment(
-//  {name: "A", ownKill: "KA"},
-//  {name: "B", ownKill: "KB"},
-//  {name: "C", ownKill: "KC"},
-//  {name: "D", ownKill: "KD"},
-//  {name: "E", ownKill: "KE"},
-//  {name: "F", ownKill: "KF"},
-//  {name: "G", ownKill: "KG"},
-//  {name: "H", ownKill: "KH"}
+//  {id: "A", ownKillId: "KA"},
+//  {id: "B", ownKillId: "KB"},
+//  {id: "C", ownKillId: "KC"},
+//  {id: "D", ownKillId: "KD"},
+//  {id: "E", ownKillId: "KE"},
+//  {id: "F", ownKillId: "KF"},
+//  {id: "G", ownKillId: "KG"},
+//  {id: "H", ownKillId: "KH"}
 //).assign()
 //
 //console.info(r)
