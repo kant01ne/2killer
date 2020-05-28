@@ -331,8 +331,10 @@ Patreon
 }
 
 .patreon__link{
+  cursor: pointer;
   text-decoration: underline;
   color: #ff4242;
+  margin-top: 20px;
 }
 
 a {
