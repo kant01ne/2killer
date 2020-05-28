@@ -1,14 +1,26 @@
 'use strict'
 var _ = require('underscore')
+const Model = use('Model')
 
-class Assignment {
-  constructor(...players) {
+class Assignment extends Model {
+  constructor(players) {
+    super()
     this.players = _.shuffle(_.map(players, (p) => new Player(p.name, p.ownKill)))
     this.kills = _.map(this.players, (p) => p.ownKill)
   }
 
   assign() {
     this.assignK(this.players[0])
+
+    let res = _.map(this.players, (p) => {
+      return {
+        victimId: parseInt(p.victim.name),
+        killerId: parseInt(p.killer.name),
+        killId: parseInt(p.assignedKill)
+      }
+    })
+
+    return res
   }
 
   // Given 4 players [A, B, C, D] with kills [KA, KB, KC, KD]. We want to assign a killer and a
@@ -135,17 +147,19 @@ class Player {
   }
 }
 
-var params = [
-]
-var r = new Assignment(
-  {name: "A", ownKill: "KA"},
-  {name: "B", ownKill: "KB"},
-  {name: "C", ownKill: "KC"},
-  {name: "D", ownKill: "KD"},
-  {name: "E", ownKill: "KE"},
-  {name: "F", ownKill: "KF"},
-  {name: "G", ownKill: "KG"},
-  {name: "H", ownKill: "KH"}
-).assign()
+//var params = [
+//]
+//var r = new Assignment(
+//  {name: "A", ownKill: "KA"},
+//  {name: "B", ownKill: "KB"},
+//  {name: "C", ownKill: "KC"},
+//  {name: "D", ownKill: "KD"},
+//  {name: "E", ownKill: "KE"},
+//  {name: "F", ownKill: "KF"},
+//  {name: "G", ownKill: "KG"},
+//  {name: "H", ownKill: "KH"}
+//).assign()
+//
+//console.info(r)
 
-console.info(r)
+module.exports = Assignment
