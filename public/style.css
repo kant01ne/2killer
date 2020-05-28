@@ -9,13 +9,31 @@ body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   background-image: url("/splash.png");
-  background-color: #220052;
+  background-color: #000;
 }
 
 * {
   margin: 0;
   padding: 0;
 }
+
+ul {  
+  margin: 0.75em 0;  
+  padding: 0 1em;  
+  list-style: none;  
+}  
+li:before {   
+  content: "";  
+  border-color: transparent #FFF;  
+  border-style: solid;  
+  border-width: 0.35em 0 0.35em 0.45em;  
+  display: block;  
+  height: 0;  
+  width: 0;  
+  left: -1em;  
+  top: 0.9em;  
+  position: relative;  
+} 
 
 section {
   height: 100%;
@@ -44,9 +62,9 @@ section:before {
   background-size: 100%;
 }
 .logo {
-  background: url("/logo.svg") no-repeat;
-  width: 36px;
-  height: 33px;
+  background: url("/logo.png") no-repeat;
+  width: 200px;
+  height: 100px;
   background-size: 100%;
   margin-bottom: 35px;
   opacity: 0;
@@ -55,7 +73,7 @@ section:before {
 
 .title {
   margin-top: 25px;
-  color: #BDB3CB;
+  color: #FFF;
   font-size: 24px;
   text-align: center;
   letter-spacing: 0.5;
@@ -65,7 +83,7 @@ section:before {
 
 .subtitle {
   margin-top: 25px;
-  color: #BDB3CB;
+  color: #FFF;
   font-size: 17px;
   text-align: center;
   letter-spacing: 0.5;
