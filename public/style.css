@@ -51,7 +51,7 @@ section:before {
   position: absolute;
   background: url("/pyramid.png") no-repeat;
   background-size: 100%;
-  width: 100%;
+  width: 55%;
   height: 402px;
   z-index: -1;
 }
