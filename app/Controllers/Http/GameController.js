@@ -55,9 +55,8 @@ class GameController {
         const victim = kill ? await User.find(kill.victim_id) : null;
         
 
-        let mobile = false;
-        if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(request.headers()['user-agent']))
-            mobile = true;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(request.headers()['user-agent']);
+    
         return view.render('welcome', {
             game: game.toJSON(),
             username: auth.user.username,
@@ -69,7 +68,7 @@ class GameController {
             victim,
             isKillOwner,
             kill,
-            mobile
+            isMobile
         })
     }
 }

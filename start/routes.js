@@ -117,7 +117,7 @@ if (process.env.ENV == 'dev') {
     })
 
     Route.get('api/games/:id', async ({params}) => {
-        const game = await Game.find(params.id);
+        const game = await Game.query().where('id', params.id).with('kills').fetch();
         return await game.toJSON();
     })
     // Set as debug routes.

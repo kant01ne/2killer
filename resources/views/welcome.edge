@@ -16,11 +16,11 @@
       <a class="whatsapp" href="https://api.whatsapp.com/send?text=http://{{link}}" data-action="share/whatsapp/share"><img src="/whatsapp.svg" /></a>
       </br>
 
-      @if(mobile)
+      @if(isMobile)
         <a href="fb-messenger://share?link=http://{{link}}"><img src="/messenger.png"/></a>
       @endif
       
-      @if(!mobile)
+      @if(!isMobile)
         <a href="http://www.facebook.com/dialog/send?app_id=582407492655263&link=http://{{link}}&redirect_uri=http://{{link}}"><img src="/messenger.png"></a>
       @endif
     @endif
@@ -87,7 +87,7 @@
         <input hidden name="id" value="{{ game.id }}"/>
         <label class="field a-field a-field_a2 page__field">
             @if(killers.length < 3)  
-        <input type="submit" class="startButton" value="Waiting for at least {{4 - killers.length}} more people to join" disabled />
+        <input type="submit" class="startButton" value="Waiting for at least {{minPlayers - killers.length}} more people to join" disabled />
             @else
             <input type="submit" class="startButton" value="Ready" />
             @endif

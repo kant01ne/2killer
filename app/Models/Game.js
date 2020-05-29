@@ -2,13 +2,12 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
-const Kill = use('App/Models/Kill')
-const User = use('App/Models/User')
 const Assignment = use('App/Models/Assignment')
+const User = use('App/Models/User')
 const crypto = require('crypto')
 const Env = use('Env')
 const _ =require('underscore');
-const minPlayers = 4;
+const minPlayers = 3;
 
 
 /**
@@ -55,22 +54,25 @@ class Game extends Model {
             if (this.started_at)
                 return true;
 
-            let kills = (await this.kills().fetch()).rows
-            console.log("kills = ")
-            console.log(kills)
-            let params = await _.map(kills, (k) => {return { id: k.user_id, ownKillId: k.id }})
-            let assignment = new Assignment(params)
-            let players = assignment.assign()
+            const kills = (await this.kills().fetch()).rows
+            const players = await Promise.all(kills.map(kill => User.find(kill.user_id)))
+            const params = await _.map(kills, k => {return { id: k.user_id, ownKillId: k.id }})
+            const assignment = new Assignment(params)
+            const nodes = assignment.assign()
 
-            // Assign killers and victims to kills.
+            // Persist kills with killers and victims.
             await Promise.all(kills.map((kill, i) => {
-                let player = _.find(players, (p) => { return p.killId === kill.id })
+                const node = _.find(nodes, n => n.killId === kill.id )
+                const killer =_.find(players, p => node.killerId === p.id);
+                const victim =_.find(players, p => node.victimId === p.id);
+
                 return Promise.all([
-                    kills[i].killer().associate(player.killerId).catch(console.log),
-                    kills[i].victim().associate(player.victimId).catch(console.log)
+                    kill.killer().associate(killer).catch(console.log),
+                    kill.victim().associate(victim).catch(console.log)
                 ]);
             }));
 
+            
             this.started_at = new Date();
             return await this.save();
         } catch (e) {
