@@ -4,6 +4,7 @@
 const Model = use('Model')
 const Kill = use('App/Models/Kill')
 const User = use('App/Models/User')
+const Assignment = use('App/Models/Assignment')
 const crypto = require('crypto')
 const Env = use('Env')
 const _ =require('underscore');
@@ -54,27 +55,19 @@ class Game extends Model {
             if (this.started_at)
                 return true;
 
-            // Fetch all kills, shuffle.
-            let kills = await _.shuffle((await this.kills().fetch()).rows);
-            // Fetch Killers, in same order.
-            let players = await Promise.all(kills.map(kill => User.find(kill.user_id)))
-
-            // Choose a random step for killers and victim.
-            // Make sure they are different from each other.
-            // Make sure they are different from 0 => Avoid Own Kill or Victim's kill.
-            const killerStep = Math.floor(Math.random() * players.length - 2) + 1;
-            let victimStep;
-            do {
-                victimStep = Math.floor(Math.random() * players.length - 2) + 1
-            } while (victimStep === killerStep)
+            let kills = (await this.kills().fetch()).rows
+            console.log("kills = ")
+            console.log(kills)
+            let params = await _.map(kills, (k) => {return { id: k.user_id, ownKillId: k.id }})
+            let assignment = new Assignment(params)
+            let players = assignment.assign()
 
             // Assign killers and victims to kills.
             await Promise.all(kills.map((kill, i) => {
-                const victimId = (i + victimStep) % players.length;
-                const killerId = (i + killerStep) % players.length;
+                let player = _.find(players, (p) => { return p.killId === kill.id })
                 return Promise.all([
-                    kills[i].killer().associate(players[killerId]).catch(console.log),
-                    kills[i].victim().associate(players[victimId]).catch(console.log)
+                    kills[i].killer().associate(player.killerId).catch(console.log),
+                    kills[i].victim().associate(player.victimId).catch(console.log)
                 ]);
             }));
 
