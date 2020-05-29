@@ -5,22 +5,20 @@ const Model = use('Model')
 class Assignment extends Model {
   constructor(players) {
     super()
-    this.players = _.shuffle(_.map(players, (p) => new Player(p.id, p.ownKillId)))
-    this.kills = _.map(this.players, (p) => p.ownKillId)
+    this.players = _.shuffle(players.map(p => new Player(p.id, p.ownKillId)))
+    this.kills = this.players.map(p => p.ownKillId)
   }
 
   assign() {
     this.assignK(this.players[0])
 
-    let res = _.map(this.players, (p) => {
+    return this.players.map(p => {
       return {
         victimId: p.victim.id,
         killerId: p.killer.id,
-        killId: p.assignedKill
+        killId: p.ownKillId
       }
-    })
-
-    return res
+    });
   }
 
   // Given 4 players [A, B, C, D] with kills [KA, KB, KC, KD]. We want to assign a killer and a

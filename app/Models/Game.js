@@ -56,12 +56,12 @@ class Game extends Model {
 
             const kills = (await this.kills().fetch()).rows
             const players = await Promise.all(kills.map(kill => User.find(kill.user_id)))
-            const params = await _.map(kills, k => {return { id: k.user_id, ownKillId: k.id }})
+            const params = _.map(kills, k => {return { id: k.user_id, ownKillId: k.id }})
             const assignment = new Assignment(params)
             const nodes = assignment.assign()
 
             // Persist kills with killers and victims.
-            await Promise.all(kills.map((kill, i) => {
+            await Promise.all(kills.map(kill => {
                 const node = _.find(nodes, n => n.killId === kill.id )
                 const killer =_.find(players, p => node.killerId === p.id);
                 const victim =_.find(players, p => node.victimId === p.id);
@@ -72,7 +72,6 @@ class Game extends Model {
                 ]);
             }));
 
-            
             this.started_at = new Date();
             return await this.save();
         } catch (e) {

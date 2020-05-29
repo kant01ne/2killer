@@ -91,6 +91,10 @@ section:before {
   animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
 }
 
+.own-killer {
+  text-decoration: underline;
+}
+
 .form {
   opacity: 0;
   animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
