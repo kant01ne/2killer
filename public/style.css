@@ -124,11 +124,14 @@ section:before {
 
 .field__input:focus::-webkit-input-placeholder{
   color: var(--uiFieldPlaceholderColor);
+  font-size: 0.7em !important;
+
 }
 
 .field__input:focus::-moz-placeholder{
   color: var(--uiFieldPlaceholderColor);
   opacity: 1;
+  font-size: 0.7em !important;
 }
 
 /*

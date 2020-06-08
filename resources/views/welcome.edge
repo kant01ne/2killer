@@ -48,7 +48,7 @@
       <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
         </label>
         <label class="field a-field a-field_a2 page__field">
-          <input class="field__input a-field__input" name="description" value="" placeholder="Balance le kill auquel t'aurais voulu penser avant de commencer cette game." required/>
+          <input class="field__input a-field__input" name="description" value="" placeholder="Balance le kill auquel t'aurais voulu penser avant de commencer cette game." required />
           <span class="a-field__label-wrap">
             <span class="a-field__label">Suggère un kill</span>
           </span>
@@ -131,7 +131,7 @@
         <input hidden name="id" value="{{ game.id }}"/>
         <label class="field a-field a-field_a2 page__field">
             @if(killers.length < 3)  
-              <input type="submit" class="startButton" value=En attente d'au moins {{minPlayers - killers.length}} autres personne pour commencer." disabled />
+              <input type="submit" class="startButton" value="En attente d'au moins {{minPlayers - killers.length}} autres personnes pour commencer." disabled />
             @else
               @if(!isUpdateKill)
                 <input type="submit" class="startButton" value="Ready" />
