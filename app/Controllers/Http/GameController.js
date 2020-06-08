@@ -1,7 +1,10 @@
 'use strict'
 const User = use('App/Models/User')
 const Game = use('App/Models/Game')
+const Kill = use('App/Models/Kill')
 const _ = use('underscore');
+
+const BASE_URL = process.env.BASE_URL;
 
 class GameController {
     async store ({request, response, auth}) {
@@ -17,10 +20,22 @@ class GameController {
                 await auth.user.games().save(game)
             }
 
-            // Save new Kill.
-            const killData = {description:request.body.description};
-            const kill = await game.kills().create(killData);
-            await auth.user.kills().save(kill)
+            // Save Kill.
+            const killData = {description: request.body.description};
+
+            // If update kill
+            if (request.body.kill_id) {
+                const existingKill = await Kill.find(request.body.kill_id);
+                existingKill.merge(killData)
+                await existingKill.save()
+            } 
+            // Else if new kill
+            else {
+                const newKill = await game.kills().create(killData);
+                await auth.user.kills().save(newKill)
+            
+            }
+                
             return response.redirect(`/g/${game.encrypt()}`)
     
         } catch (e) {
@@ -30,7 +45,6 @@ class GameController {
     }
 
     async start ({response, params}) {
-        console.log("Entering start");
         const game = await Game.find(params.id)
     
         if (!game.started_at)
@@ -40,37 +54,65 @@ class GameController {
     }
 
     async index ({params , auth, request, view}) {
+        const killSuggestion = await getKillSuggestion()
+        console.log(killSuggestion)
         // No game.
-        if (!params.encrypted)
+        if (!params.encrypted) {
             return view.render('welcome', {
                 username: auth.user.username,
+                killSuggestion
             })
-
-        // Otherwise, load existing Game.
+        }
+        // Otherwise, load existing Game data.
         const game = await Game.findFromEncrypted(params.encrypted.toString());
-        const killers = (await game.killers().fetch()).rows;
+        let killers = (await game.killers().fetch()).rows;
+        killers = _.sortBy(killers, 'username')
         const kills = (await game.kills().fetch()).rows;
         const kill =  _(kills.map(k => k.toJSON())).findWhere({killer_id: auth.user.id});
+        const ownKill =  _(kills.map(k => k.toJSON())).findWhere({user_id: auth.user.id});
         const isKillOwner =  Boolean(_(killers.map(k => k.toJSON())).findWhere({id: auth.user.id}));
         const victim = kill ? await User.find(kill.victim_id) : null;
         
 
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(request.headers()['user-agent']);
-    
+        const isUpdateKill =  request._qs && request._qs.updateKill;
+        const isSuggestKill =  request._qs && request._qs.suggestKill;
+
         return view.render('welcome', {
             game: game.toJSON(),
             username: auth.user.username,
             minPlayers: Game.minPlayers(),
             killers: killers.map(k => k.username),
-            link: `${request.headers().host}${request.url()}`,
+            link: `${BASE_URL}${request.url()}`,
             isGameOwner: game.user_id === auth.user.id,
             startedAt: game.started_at,
             victim,
             isKillOwner,
             kill,
-            isMobile
+            ownKill,
+            isMobile,
+            isUpdateKill,
+            isSuggestKill,
+            killSuggestion
         })
     }
 }
 
+
+async function getKillSuggestion () {
+    try {
+        const kills = (await Kill.query().where('is_approved_by_admin', true).fetch()).rows;
+
+        // If no kills, return undefined.
+        if (kills.length == 0)
+            return undefined;
+
+        // Otherwise, return random kill. 
+        return kills[Math.floor(Math.random() * kills.length)].description;
+        
+
+    } catch (e) {
+        return undefined;
+    }
+}
 module.exports = GameController

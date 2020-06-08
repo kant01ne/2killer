@@ -5,7 +5,7 @@ class GuestAuth {
   async handle ({request, session, auth }, next) {
     try {
       await auth.check();
-      if (auth.user.username || !request.body.username)
+      if (!request.body.username)
         return await next()
 
       auth.user.username = request.body.username

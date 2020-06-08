@@ -8,30 +8,14 @@
 <body>
   <section>
     <div class="logo"></div>
-    @if(isGameOwner && !startedAt)
-      <div class="title">Share this link with your friends to get started:</div>
-      <a class="patreon__link">http://{{link}}</a>
-      <br/>
-
-      <a class="whatsapp" href="https://api.whatsapp.com/send?text=http://{{link}}" data-action="share/whatsapp/share"><img src="/whatsapp.svg" /></a>
-      </br>
-
-      @if(isMobile)
-        <a href="fb-messenger://share?link=http://{{link}}"><img src="/messenger.png"/></a>
-      @endif
-      
-      @if(!isMobile)
-        <a href="http://www.facebook.com/dialog/send?app_id=582407492655263&link=http://{{link}}&redirect_uri=http://{{link}}"><img src="/messenger.png"></a>
-      @endif
-    @endif
 
     @if(!isKillOwner)
-      <div class="title">Start a killer role play game without game owner.</div>
+      <div class="title">Jouer au killer sans maitre du jeu.</div>
     @endif
 
     @if(!startedAt && killers)
       </br>
-      <p class="subtitle">Killers ready to kill (refresh this tab regularly to see new players):</p>
+      <p class="subtitle">Les killers prêts à en découdre (refresh la tab pour voir les nouveaux):</p>
       <ul>
         @each(killer in killers)
         @if(killer == username)
@@ -44,46 +28,93 @@
     @endif
 
     @if(kill)
-      <div class="subtitle">Your kill: {{kill.description}}</div>
-      <div class="subtitle">Your victim: {{victim.username}}</div>
+      <div class="subtitle">Ton kill: {{kill.description}}</div>
+      <div class="subtitle">Ta victime: {{victim.username}}</div>
+      @if(!isSuggestKill)
+        <p><a class="subtitle update-kill" href="?suggestKill=1">T'as une nouvelle idée de Kill? Partage la pour qu'on puisse la suggérer aux futurs participants en panne d'inspi.</a></p>
+      @endif
     @endif
 
-    @if(!isKillOwner)
-
-      <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
+    @if(isSuggestKill)
+      <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
+        </label>
         <label class="field a-field a-field_a2 page__field">
-          <input class="field__input a-field__input" name="description" placeholder="Handstand on the beach" required/>
+          <input class="field__input a-field__input" name="description" value="" placeholder="Balance le kill auquel t'aurais voulu penser avant de commencer cette game." required/>
           <span class="a-field__label-wrap">
-            <span class="a-field__label">Your kill</span>
+            <span class="a-field__label">Suggère un kill</span>
           </span>
         </label>  
-        @if(!username)
-          <label class="field a-field a-field_a2 page__field">
-            <input class="field__input a-field__input" name="username" placeholder="BonFamin42" type="text" required/>
-            <span class="a-field__label-wrap">
-              <span class="a-field__label">Username</span>
-            </span>
-          </label>
-        @endif
         {{ csrfField() }}
-        <input hidden name="id" value="{{ game.id }}"/>
-        <label class="field a-field a-field_a2 page__field">
-          <input type="submit" class="startButton" value="Start"/>
+        <input hidden name="game_id" value="{{ game.id }}"/>
+        <label class="subtitle field a-field a-field_a2 page__field">
+            <input type="submit" class="startButton" value="Suggest"/>
         </label>  
       </form>
-      <div class="subtitle">
-        <p>
-        </p>
-      </div>
+    @endif
+
+
+    @if(!startedAt && !isUpdateKill && isKillOwner)
+      <p><a class="subtitle update-kill" href="?updateKill=1">Modifier mon kill</a></p>
+    @endif
+
+
+    @if(!isKillOwner || (isUpdateKill && !startedAt))
+      <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
+        <label class="field a-field a-field_a2 page__field">
+          <input class="field__input a-field__input" name="username" value="{{username}}" placeholder="BonFamin42" type="text" required/>
+          <span class="a-field__label-wrap">
+            <span class="a-field__label">Ton blaze</span>
+          </span>
+        </label>
+        <label class="field a-field a-field_a2 page__field">
+          <input class="field__input a-field__input" name="description" value="{{ownKill.description || ''}}" placeholder="{{killSuggestion}}" required/>
+          <span class="a-field__label-wrap">
+            <span class="a-field__label">Ton kill</span>
+          </span>
+        </label>  
+        {{ csrfField() }}
+        <input hidden name="id" value="{{ game.id }}"/>
+        <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
+        <label class="subtitle field a-field a-field_a2 page__field">
+          @if(isUpdateKill)
+            <input type="submit" class="startButton" value="Update"/>
+          @else
+            <input type="submit" class="startButton" value="Start"/>
+          @endif
+        </label>  
+      </form>
     @endif
 
     @if(!isGameOwner && !startedAt && isKillOwner)
       @if(killers.length < minPlayers)
-        <div class="subtitle">Waiting for at least {{minPlayers - killers.length}} more people to join...</div>
+        <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
       @else
-        <div class="subtitle">Waiting for game owner to start the game...</div>
+        <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
       @endif
     @endif
+
+
+    @if(isGameOwner && !startedAt)
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <div class="title">Partage ce lien avec tes amis pour commencer la partie:</div>
+      <a class="patreon__link">{{link}}</a>
+      <br/>
+
+      <a class="whatsapp" href="https://api.whatsapp.com/send?text={{link}}" data-action="share/whatsapp/share"><img src="/whatsapp.svg" /></a>
+      </br>
+
+      @if(isMobile)
+        <a href="fb-messenger://share?link={{link}}"><img src="/messenger.png"/></a>
+      @endif
+      
+      @if(!isMobile)
+        <a href="http://www.facebook.com/dialog/send?app_id=582407492655263&link={{link}}&redirect_uri={{link}}"><img src="/messenger.png"></a>
+      @endif
+    @endif
+
 
     @if(isGameOwner && !startedAt)
       <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
@@ -91,9 +122,11 @@
         <input hidden name="id" value="{{ game.id }}"/>
         <label class="field a-field a-field_a2 page__field">
             @if(killers.length < 3)  
-        <input type="submit" class="startButton" value="Waiting for at least {{minPlayers - killers.length}} more people to join" disabled />
+              <input type="submit" class="startButton" value=En attente d'au moins {{minPlayers - killers.length}} autres personne pour commencer." disabled />
             @else
-            <input type="submit" class="startButton" value="Ready" />
+              @if(!isUpdateKill)
+                <input type="submit" class="startButton" value="Ready" />
+              @endif
             @endif
         </label>  
       </form>
