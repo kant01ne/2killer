@@ -55,7 +55,6 @@ class GameController {
 
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion()
-        console.log(killSuggestion)
         // No game.
         if (!params.encrypted) {
             return view.render('welcome', {

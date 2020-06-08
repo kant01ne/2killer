@@ -68,7 +68,7 @@ Route.get('admin/:password/kills/:id/approve', async ({params}) => {
     return await kill.save()
 });
 
-Route.get('admin/:password/games', async () => {
+Route.get('admin/:password/games', async ({params}) => {
     if (!adminAuth(params.password))
         return 'Unauthorized';
 
@@ -112,7 +112,6 @@ if (process.env.ENV == 'dev') {
     })
 
     Route.get('api/games', async () => {
-        console.log('Entering Games Route');
         return await Game.query().with('kills').fetch()
     })
 
