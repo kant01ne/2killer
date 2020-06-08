@@ -107,7 +107,7 @@ section:before {
 
 
 .field{
-  --uiFieldPlaceholderColor: var(--fieldPlaceholderColor, #767676);
+  --uiFieldPlaceholderColor: var(--fieldPlaceholderColor, #b5b1b1);
 }
 
 .field__input{ 
