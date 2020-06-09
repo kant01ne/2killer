@@ -127,7 +127,9 @@
         @if(killers.length < minPlayers)
           <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
         @else
-          <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
+          @if (game)
+            <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
+          @endif
         @endif
       @endif
 
