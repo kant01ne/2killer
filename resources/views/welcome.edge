@@ -123,7 +123,7 @@
         </form>
       @endif
 
-      @if(!isGameOwner && !startedAt && isKillOwner)
+      @if(!isGameOwner && !startedAt)
         @if(killers.length < minPlayers)
           <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
         @else
