@@ -64,6 +64,14 @@ class GameController {
         return response.redirect(`/g/${game.encrypt()}`)
     }
 
+
+    async new ({response, auth}) {
+        const game = await Game.create();
+        await auth.user.games().save(game)
+
+        return response.redirect(`/g/${game.encrypt()}`)
+    }
+
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion();
         const backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];

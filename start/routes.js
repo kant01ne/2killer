@@ -29,6 +29,7 @@ Route.get('/', 'GameController.index');
  * App
  */
 Route.post('/game', 'GameController.store').as('game')
+Route.post('/games/new', 'GameController.new').as('game.new')
 Route.post('/games/:id/start', 'GameController.start').as('game.start')
 Route.get('/g/:encrypted', 'GameController.index')
 

@@ -20,11 +20,11 @@
 
     <div class="container">
 
-      @if(!isKillOwner)
+      @if(!game)
         <div class="title">Jouer au killer sans maitre du jeu</div>
       @endif
 
-      @if(!startedAt && killers)
+      @if(!startedAt && killers && killers.length > 0)
         </br>
         <p class="subtitle">Les killers prêts à en découdre:</p>
         <ul>
@@ -60,47 +60,21 @@
           {{ csrfField() }}
           <input hidden name="game_id" value="{{ game.id }}"/>
           <label class="subtitle field a-field a-field_a2 page__field">
-              <input type="submit" class="startButton" value="Suggest"/>
+              <input type="submit" class="startButton" value="Envoyer"/>
           </label>  
         </form>
       @endif
 
 
-      @if(!isKillOwner || (isUpdateKill && !startedAt))
-        <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
-          <label class="field a-field a-field_a2 page__field">
-            <input class="field__input a-field__input" name="username" value="{{username}}" placeholder="PiegeAMorue42" type="text" required/>
-            <span class="a-field__label-wrap">
-              <span class="a-field__label">Ton blaze</span>
-            </span>
-          </label>
-          <label class="field a-field a-field_a2 page__field">
-            <input class="field__input a-field__input" name="description" value="{{ownKill.description || ''}}" placeholder="{{killSuggestion}}" required/>
-            <span class="a-field__label-wrap">
-              <span class="a-field__label">Ton kill</span>
-            </span>
-          </label>  
+
+      @if(!game)
+        <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
           {{ csrfField() }}
-          <input hidden name="id" value="{{ game.id }}"/>
-          <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
           <label class="subtitle field a-field a-field_a2 page__field">
-            @if(isUpdateKill)
-              <input type="submit" class="startButton" value="Update"/>
-            @else
-              <input type="submit" class="startButton" value="Start"/>
-            @endif
+              <input type="submit" class="startButton" value="Commencer"/>
           </label>  
         </form>
       @endif
-
-      @if(!isGameOwner && !startedAt && isKillOwner)
-        @if(killers.length < minPlayers)
-          <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
-        @else
-          <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
-        @endif
-      @endif
-
 
       @if(isGameOwner && !startedAt)
         <br/>
@@ -122,6 +96,42 @@
         @endif
       @endif
 
+      @if(game && !isKillOwner || (isUpdateKill && !startedAt))
+        <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="username" value="{{username}}" placeholder="PiegeAMorue42" type="text" required/>
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Ton blaze</span>
+            </span>
+          </label>
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="description" value="{{ownKill.description || ''}}" placeholder="{{killSuggestion}}" required/>
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Ton kill</span>
+            </span>
+          </label>  
+          {{ csrfField() }}
+          <input hidden name="id" value="{{ game.id }}"/>
+          <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
+          <label class="subtitle field a-field a-field_a2 page__field">
+            @if(isUpdateKill)
+              <input type="submit" class="startButton" value="Modifier"/>
+            @else
+              <input type="submit" class="startButton" value="Envoyer"/>
+            @endif
+          </label>  
+        </form>
+      @endif
+
+      @if(!isGameOwner && !startedAt && isKillOwner)
+        @if(killers.length < minPlayers)
+          <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
+        @else
+          <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
+        @endif
+      @endif
+
+
       @if(!startedAt && !isUpdateKill && isKillOwner)
         <a class="subtitle update-kill" href="?updateKill=1">Modifier mon kill</a>
       @endif
@@ -137,7 +147,7 @@
                 <input type="submit" class="startButton" value="En attente d'au moins {{minPlayers - killers.length}} autre(s) personne(s)" disabled />
               @else
                 @if(!isUpdateKill)
-                  <input type="submit" class="startButton" value="Ready" />
+                  <input type="submit" class="startButton" value="Prêt" />
                 @endif
               @endif
           </label>  
