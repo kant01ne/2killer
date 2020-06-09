@@ -14,133 +14,137 @@
   gtag('config', 'UA-167446947-2');
 </script>
 </head>
-<body>
+<body style="background-color:{{backgroundColor}}">
   <section>
     <div class="logo"></div>
 
-    @if(!isKillOwner)
-      <div class="title">Jouer au killer sans maitre du jeu.</div>
-    @endif
+    <div class="container">
 
-    @if(!startedAt && killers)
-      </br>
-      <p class="subtitle">Les killers prêts à en découdre (refresh la tab pour voir les nouveaux):</p>
-      <ul>
-        @each(killer in killers)
-        @if(killer == username)
-          <li class="subtitle own-killer">{{killer}}</li>
-        @else
-          <li class="subtitle">{{killer}}</li>
-        @endif
-        @endeach
-      </ul>
-    @endif
-
-    @if(kill)
-      <div class="subtitle">Ton kill: {{kill.description}}</div>
-      <div class="subtitle">Ta victime: {{victim.username}}</div>
-      @if(!isSuggestKill)
-        <p><a class="subtitle update-kill" href="?suggestKill=1">T'as une nouvelle idée de Kill? Partage la pour qu'on puisse la suggérer aux futurs participants en panne d'inspi.</a></p>
+      @if(!isKillOwner)
+        <div class="title">Jouer au killer sans maitre du jeu</div>
       @endif
-    @endif
 
-    @if(isSuggestKill)
-      <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
-        </label>
-        <label class="field a-field a-field_a2 page__field">
-          <input class="field__input a-field__input" name="description" value="" placeholder="Balance le kill auquel t'aurais voulu penser avant de commencer cette game." required />
-          <span class="a-field__label-wrap">
-            <span class="a-field__label">Suggère un kill</span>
-          </span>
-        </label>  
-        {{ csrfField() }}
-        <input hidden name="game_id" value="{{ game.id }}"/>
-        <label class="subtitle field a-field a-field_a2 page__field">
-            <input type="submit" class="startButton" value="Suggest"/>
-        </label>  
-      </form>
-    @endif
-
-
-    @if(!startedAt && !isUpdateKill && isKillOwner)
-      <p><a class="subtitle update-kill" href="?updateKill=1">Modifier mon kill</a></p>
-    @endif
-
-
-    @if(!isKillOwner || (isUpdateKill && !startedAt))
-      <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
-        <label class="field a-field a-field_a2 page__field">
-          <input class="field__input a-field__input" name="username" value="{{username}}" placeholder="BonFamin42" type="text" required/>
-          <span class="a-field__label-wrap">
-            <span class="a-field__label">Ton blaze</span>
-          </span>
-        </label>
-        <label class="field a-field a-field_a2 page__field">
-          <input class="field__input a-field__input" name="description" value="{{ownKill.description || ''}}" placeholder="{{killSuggestion}}" required/>
-          <span class="a-field__label-wrap">
-            <span class="a-field__label">Ton kill</span>
-          </span>
-        </label>  
-        {{ csrfField() }}
-        <input hidden name="id" value="{{ game.id }}"/>
-        <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
-        <label class="subtitle field a-field a-field_a2 page__field">
-          @if(isUpdateKill)
-            <input type="submit" class="startButton" value="Update"/>
+      @if(!startedAt && killers)
+        </br>
+        <p class="subtitle">Les killers prêts à en découdre:</p>
+        <ul>
+          @each(killer in killers)
+          @if(killer == username)
+            <li class="subtitle own-killer">{{killer}}</li>
           @else
-            <input type="submit" class="startButton" value="Start"/>
+            <li class="subtitle">{{killer}}</li>
           @endif
-        </label>  
-      </form>
-    @endif
+          @endeach
+        </ul>
 
-    @if(!isGameOwner && !startedAt && isKillOwner)
-      @if(killers.length < minPlayers)
-        <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
-      @else
-        <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
+        <p class="subtitle subsubtitle">PS: Rafraichis la page pour voir de nouvelles personnes.</p>
       @endif
-    @endif
 
-
-    @if(isGameOwner && !startedAt)
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <div class="title">Partage ce lien avec tes amis pour commencer la partie:</div>
-      <a class="patreon__link">{{link}}</a>
-      <br/>
-
-      <a class="whatsapp" href="https://api.whatsapp.com/send?text={{link}}" data-action="share/whatsapp/share"><img src="/whatsapp.svg" /></a>
-      </br>
-
-      @if(isMobile)
-        <a href="fb-messenger://share?link={{link}}"><img src="/messenger.png"/></a>
+      @if(kill)
+        <div class="subtitle">Ton kill: {{kill.description}}</div>
+        <div class="subtitle">Ta victime: {{victim.username}}</div>
+        @if(!isSuggestKill)
+          <p><a class="subtitle subsubtitle" href="?suggestKill=1">T'as une nouvelle idée de Kill? Partage la pour qu'on puisse la suggérer aux futurs participants en panne d'inspi</a></p>
+        @endif
       @endif
-      
-      @if(!isMobile)
-        <a href="http://www.facebook.com/dialog/send?app_id=582407492655263&link={{link}}&redirect_uri={{link}}"><img src="/messenger.png"></a>
+
+      @if(isSuggestKill)
+        <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
+          </label>
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="description" value="" placeholder="Balance le kill auquel t'aurais voulu penser avant de commencer cette game." required />
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Suggère un kill</span>
+            </span>
+          </label>  
+          {{ csrfField() }}
+          <input hidden name="game_id" value="{{ game.id }}"/>
+          <label class="subtitle field a-field a-field_a2 page__field">
+              <input type="submit" class="startButton" value="Suggest"/>
+          </label>  
+        </form>
       @endif
-    @endif
 
 
-    @if(isGameOwner && !startedAt)
-      <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
-        {{ csrfField() }}
-        <input hidden name="id" value="{{ game.id }}"/>
-        <label class="field a-field a-field_a2 page__field">
-            @if(killers.length < 3)  
-              <input type="submit" class="startButton" value="En attente d'au moins {{minPlayers - killers.length}} autres personnes pour commencer." disabled />
+      @if(!isKillOwner || (isUpdateKill && !startedAt))
+        <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="username" value="{{username}}" placeholder="BonFamin42" type="text" required/>
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Ton blaze</span>
+            </span>
+          </label>
+          <label class="field a-field a-field_a2 page__field">
+            <input class="field__input a-field__input" name="description" value="{{ownKill.description || ''}}" placeholder="{{killSuggestion}}" required/>
+            <span class="a-field__label-wrap">
+              <span class="a-field__label">Ton kill</span>
+            </span>
+          </label>  
+          {{ csrfField() }}
+          <input hidden name="id" value="{{ game.id }}"/>
+          <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
+          <label class="subtitle field a-field a-field_a2 page__field">
+            @if(isUpdateKill)
+              <input type="submit" class="startButton" value="Update"/>
             @else
-              @if(!isUpdateKill)
-                <input type="submit" class="startButton" value="Ready" />
-              @endif
+              <input type="submit" class="startButton" value="Start"/>
             @endif
-        </label>  
-      </form>
-    @endif
-    
+          </label>  
+        </form>
+      @endif
+
+      @if(!isGameOwner && !startedAt && isKillOwner)
+        @if(killers.length < minPlayers)
+          <div class="subtitle">En attente d'au moins {{minPlayers - killers.length}} personnes...</div>
+        @else
+          <div class="subtitle">En attente de lancement par le créateur de la partie...</div>
+        @endif
+      @endif
+
+
+      @if(isGameOwner && !startedAt)
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="subtitle">Partage <a class="subtitle" href={{link}}>ce lien</a> avec tes amis pour commencer la partie</div>
+        <br/>
+
+        <a class="whatsapp" href="https://api.whatsapp.com/send?text={{link}}" data-action="share/whatsapp/share"></a>
+        </br>
+
+        @if(isMobile)
+          <a class="messenger"  href="fb-messenger://share?link={{link}}"></a>
+        @endif
+        
+        @if(!isMobile)
+          <a class="messenger" href="http://www.facebook.com/dialog/send?app_id=582407492655263&link={{link}}&redirect_uri={{link}}"></a>
+        @endif
+      @endif
+
+      @if(!startedAt && !isUpdateKill && isKillOwner)
+        <a class="subtitle update-kill" href="?updateKill=1">Modifier mon kill</a>
+      @endif
+
+
+
+      @if(isGameOwner && !startedAt)
+        <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
+          {{ csrfField() }}
+          <input hidden name="id" value="{{ game.id }}"/>
+          <label class="field a-field a-field_a2 page__field">
+              @if(killers.length < 3)  
+                <input type="submit" class="startButton" value="En attente d'au moins {{minPlayers - killers.length}} autre(s) personne(s)" disabled />
+              @else
+                @if(!isUpdateKill)
+                  <input type="submit" class="startButton" value="Ready" />
+                @endif
+              @endif
+          </label>  
+        </form>
+      @endif
+
+    </div>
   </section>
 </body>
 </html>
