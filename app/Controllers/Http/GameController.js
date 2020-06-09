@@ -12,7 +12,8 @@ const bgColors = [
     "#5c5c5c",
     "#100a0a",
     "#5c0000",
-    "#8b3838"
+    "#8b3838",
+    "#1c1010"
 ]
 const BASE_URL = process.env.BASE_URL;
 
