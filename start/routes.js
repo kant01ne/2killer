@@ -23,11 +23,11 @@ const Kill = use('App/Models/Kill')
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
 
-Route.get('/', 'GameController.index');
 
 /**
  * App
  */
+Route.get('/', 'GameController.index');
 Route.post('/game', 'GameController.store').as('game')
 Route.post('/games/new', 'GameController.new').as('game.new')
 Route.post('/games/:id/start', 'GameController.start').as('game.start')
@@ -41,6 +41,7 @@ Route.post('/kills/suggest', async ({response, request}) => {
     return response.redirect(`/g/${game.encrypt()}`)
 }).as('kill.suggest')
 
+Route.get('/doc', ({view}) => view.render('doc'))
 
 /*
 * Admin

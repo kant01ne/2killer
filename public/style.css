@@ -131,8 +131,24 @@ section:before {
   animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
 }
 
+.text {
+  margin-top: 10px;
+  color: #FFF;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0.5;
+  opacity: 1;
+  animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
+}
+
 .own-killer {
   text-decoration: underline;
+}
+
+
+.rules {
+  font-size: 14px;
+  font-style: italic;
 }
 
 .form {
