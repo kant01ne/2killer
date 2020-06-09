@@ -424,7 +424,8 @@ Start Button
 	font-size:24px;
   padding:17px 76px;
   /* min-width:75%; */
-	text-decoration:none;
+  text-decoration:none;
+  margin-bottom: 50px;
 }
 .startButton:hover {
 	background-color:transparent;
