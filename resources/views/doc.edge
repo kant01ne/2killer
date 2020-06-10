@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="description" content="Jeu du killer: Comment effectuer l'attribution des kills"/>
+  <meta name="robots" content="Jeu de role, le killer, jeu du killer, role game play, jeu killer, jeu entre amis, killer"/>
+  <meta name="googlebot" content="Jeu de role, le killer, jeu du killer, role game play, jeu killer, jeu entre amis, killer"/>
+  <meta name="viewport" content="Jeu du killer">
   <title>The Killer</title>
   {{ style('style') }}
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -79,13 +83,18 @@
   </section>
   <script>
     function goBack() {
-      window.history.back();
+      // If coming from main page or current game, return to previous page.
+      if (window.history.length > 2)
+        return  window.history.back();
+        
+      // Otherwise if coming from outside, return to main page.
+      window.location.pathname = "/";
     }
   </script>
   <script>
   "use strict";
 
-  !function() {==
+  !function() {
     var t = window.driftt = window.drift = window.driftt || [];
     if (!t.init) {
       if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
