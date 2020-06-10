@@ -143,6 +143,12 @@ section:before {
   animation: slideUp 1s cubic-bezier(0.19, 1, 0.30, 1) 0.5s forwards;
 }
 
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+  .rules {
+    font-size: 34px;
+  }
+}
+
 .text {
   margin-top: 10px;
   color: #FFF;
@@ -161,16 +167,21 @@ section:before {
   padding-top: 350px;
 }
 
-@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
-  .doc-section {
-    padding-top: 0px;
-  }
-}
-
 .rules-link {
   font-size: 14px;
   font-style: italic;
-  margin-bottom: 15px;
+  margin-bottom: 35px;
+}
+
+
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+  .doc-section {
+    padding-top: 550px;
+  }
+
+  .rules-link {
+    font-size: 28px;
+  }
 }
 
 .form {
@@ -198,14 +209,18 @@ section:before {
 
 .field__input:focus::-webkit-input-placeholder{
   color: var(--uiFieldPlaceholderColor);
-  font-size: 0.7em !important;
-
+  font-size: 0.8em !important;
 }
 
 .field__input:focus::-moz-placeholder{
   color: var(--uiFieldPlaceholderColor);
   opacity: 1;
-  font-size: 0.85em !important;
+}
+
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+  .field__input:focus::-webkit-input-placeholder{
+    font-size: 1.3em !important;
+  }
 }
 
 /*
@@ -296,10 +311,15 @@ LEVEL 3. PRESENTATION STYLES
 
   pointer-events: none;
   cursor: text;
-
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+  .a-field .a-field__label-wrap{
+    font-size: 35px;
+  }
 }
 
 .a-field .a-field__label{
