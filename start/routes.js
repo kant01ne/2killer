@@ -23,6 +23,8 @@ const Kill = use('App/Models/Kill')
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
 
+const {bgColors, getRandomItem} = require('../utils/misc.js')
+
 
 /**
  * App
@@ -41,7 +43,12 @@ Route.post('/kills/suggest', async ({response, request}) => {
     return response.redirect(`/g/${game.encrypt()}`)
 }).as('kill.suggest')
 
-Route.get('/doc', ({view}) => view.render('doc'))
+Route.get('/doc', ({view}) => {
+    const backgroundColor = getRandomItem(bgColors)
+    return view.render('doc', {
+        backgroundColor
+    })
+});
 
 /*
 * Admin

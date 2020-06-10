@@ -3,18 +3,9 @@ const User = use('App/Models/User')
 const Game = use('App/Models/Game')
 const Kill = use('App/Models/Kill')
 const _ = use('underscore');
-const bgColors = [
-    "#000",
-    "#1f1f1f",
-    "#333232",
-    "#351d1d",
-    "#493737",
-    "#5c5c5c",
-    "#100a0a",
-    "#5c0000",
-    "#8b3838",
-    "#1c1010"
-]
+const {bgColors, getRandomItem} = require('../../../utils/misc.js')
+
+
 const BASE_URL = process.env.BASE_URL;
 
 class GameController {
@@ -74,7 +65,7 @@ class GameController {
 
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion();
-        const backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+        const backgroundColor = getRandomItem(bgColors)
 
         // No game.
         if (!params.encrypted) {

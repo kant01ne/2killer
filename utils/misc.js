@@ -15,3 +15,16 @@ Array.prototype.swap = function (x,y) {
   this[y] = b;
   return this;
 }
+
+exports.bgColors = [
+  "#000",
+  "#1f1f1f",
+  "#333232",
+  "#351d1d",
+  "#493737",
+  "#5c5c5c",
+  "#100a0a",
+  "#5c0000",
+  "#8b3838",
+  "#1c1010"
+]

@@ -14,30 +14,64 @@
   gtag('config', 'UA-167446947-2');
 </script>
 </head>
-<body>
-  <section>
+<body style="background-color:{{backgroundColor}}">
+  <section style="padding-top: 100px">
       <div class="title">Les règles du jeu du killer</div>
-      <p class="subtitle">
+      <br/><br/>
+      <p class="rules">
         Le Killer est un jeu se déroulant sur une longue durée. Idéal pour un week-end ou une semaine de vacances entre amis.
       </p>
       </br>
-      <p class="subtitle">
+      <p class="rules">
         Au début de la partie chaque joueur renseigne un kill. Soyez créatif!
         Lorsque tous les joueurs sont prêts, chacun se voit attribuer un kill et une victime.
       </p>
 
-      <p class="subtitle">
+      <p class="rules">
         Pour effectuer son Kill, un joueur doit convaincre sa victime de réaliser l'action qui lui aura été attribuée.
         Lorsqu'un joueur effectue son kill, il récupère le kill et la victime de la personne qu'il vient de killer.
       </p>
 
-      <p class="subtitle">
+      <p class="rules">
         Le but du jeu est simplement d'être le dernier survivant. 
       </p>
+
+      <br/><br/>
+      <br/><br/>
+
+       <div class="title">Pourquoi utiliser une app?</div>
+      <br/><br/>
+
+      <p class="rules">
+        Originellement, il est nécessaire d'avoir un maitre du jeu se chargeant d'établir un cycle d'attribution des kills.
+        Cela afin d'éviter d'obtenir plusieurs boucles dans le cas d'un tirage au sort totalement aléatoire.
+      </p>
+
+      <p class="rules">
+        En effet dans une partie impliquant les joueurs A,B,C,D,E et F, un tirage au sort pourrait définir les kills suivants:</br>
+        - A => D, D => E, E => A </br>
+        - C => F, F => B, B => C</br></br>
+        Dans cette configuration, il est impossible d'obtenir un vainqueur.</br>
+      </p>
+
+      <p class="rules">
+        C'est pour pallier à ce problème que nous avons décidé d'implémenter un algorithme de répartition permettant d'obtenir un unique cycle aléatoire avec les charactéristiques suivantes:</br>
+          - Un joueur ne peut pas obtenir son propre kill.</br>
+          - Un joueur ne peut pas killer une victime avec son propre kill.</br></br>
+        Attention, c'est le cas uniquement au 1er tour. Après quelques kills vous tomberez forcèment dans ce cas de figure.</br>
+      </p>
+
+      <a class="subtitle rules-link" onclick="goBack()">Retour à la partie</a>
+  </section>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
   <script>
   "use strict";
 
-  !function() {
+  !function() {==
     var t = window.driftt = window.drift = window.driftt || [];
     if (!t.init) {
       if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
