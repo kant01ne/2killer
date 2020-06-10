@@ -25,12 +25,12 @@
       </p>
       </br>
       <p class="rules">
-        Au début de la partie chaque joueur renseigne un kill. Soyez créatif!
+        Au début de la partie chaque joueur renseigne un kill. Un bon kill est une action amusante, parfois contraignante, mais réalisable. Soyez créatif!
         Lorsque tous les joueurs sont prêts, chacun se voit attribuer un kill et une victime.
       </p>
 
       <p class="rules">
-        Pour effectuer son Kill, un joueur doit convaincre sa victime de réaliser l'action qui lui aura été attribuée.
+        Pour effectuer son kill, un joueur doit convaincre sa victime de réaliser l'action qui lui aura été attribuée.
         Lorsqu'un joueur effectue son kill, il récupère le kill et la victime de la personne qu'il vient de killer.
       </p>
 
@@ -45,7 +45,7 @@
       <br/><br/>
 
       <p class="rules">
-        Originellement, il est nécessaire d'avoir un maitre du jeu se chargeant d'établir un cycle d'attribution des kills.
+        L'attribution des kills ne peut pas s'effectuer de manière totalement aléatoire.
         Cela afin d'éviter d'obtenir plusieurs boucles dans le cas d'un tirage au sort totalement aléatoire.
       </p>
 
@@ -57,11 +57,23 @@
       </p>
 
       <p class="rules">
-        C'est pour pallier à ce problème que nous avons décidé d'implémenter un algorithme de répartition permettant d'obtenir un unique cycle aléatoire avec les charactéristiques suivantes:</br>
+         Originellement, il est nécessaire d'avoir un maitre du jeu se chargeant d'établir un cycle d'attribution des kills. 
+         Cela afin d'éviter d'obtenir plusieurs boucles dans le cas d'un tirage au sort totalement aléatoire, comme décrite ci dessus.
+         Le rôle du maitre du jeu s'arrète ici.
+      </p>
+
+      <p class="rules">
+        C'est pour pallier à ce problème que nous avons décidé d'implémenter un algorithme de répartition permettant d'obtenir un cycle unique aléatoire.
+        L'appli prend le rôle de maitre du jeu et personne n'est laissé de coté.
+      </p>
+        
+      <p class="rules">
+        La répartition se fait selon les charactéristiques suivantes:</br>
           - Un joueur ne peut pas obtenir son propre kill.</br>
-          - Un joueur ne peut pas killer une victime avec son propre kill.</br></br>
+          - Un joueur ne peut pas killer une victime avec le kill de cette dernière.</br></br>
         Attention, c'est le cas uniquement au 1er tour. Après quelques kills vous tomberez forcèment dans ce cas de figure.</br>
       </p>
+
 
       <a class="subtitle rules-link" onclick="goBack()">Retour à la partie</a>
   </section>
