@@ -157,6 +157,15 @@ section:before {
   text-decoration: underline;
 }
 
+.doc-section {
+  padding-top: 250px;
+}
+
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+  .doc-section {
+    padding-top: 0px;
+  }
+}
 
 .rules-link {
   font-size: 14px;
