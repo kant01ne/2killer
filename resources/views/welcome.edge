@@ -10,6 +10,7 @@
   {{ style('style') }}
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-167446947-2"></script>
+<script async src="/app.js"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -85,7 +86,7 @@
         <br/>
         <br/>
         <br/>
-        <div class="subtitle">Partage <a class="subtitle" href={{link}}>ce lien</a> avec tes amis pour commencer la partie</div>
+        <div class="subtitle">Partage avec tes amis pour commencer la partie:</div>
         <br/>
 
         <a class="whatsapp" href="https://api.whatsapp.com/send?text={{link}}" data-action="share/whatsapp/share"></a>
@@ -98,6 +99,9 @@
         @if(!isMobile)
           <a class="messenger" href="http://www.facebook.com/dialog/send?app_id=582407492655263&link={{link}}&redirect_uri={{link}}"></a>
         @endif
+
+        <div id="copyTarget" hidden>{{link}}</div>
+        <div id="copyButton" type="submit" class="clipboardButton clipboard"></div>
       @endif
 
       @if(game && !isKillOwner || (isUpdateKill && !startedAt))

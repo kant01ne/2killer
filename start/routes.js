@@ -50,141 +50,45 @@ Route.get('/doc', ({view}) => {
     })
 });
 
+
+/* .well-known */
+Route.on('/.well-known/security.txt').render('security')
+Route.on('/.well-known/robots.txt').render('robots')
+Route.on('/.well-known/assetlinks.json').render('assetlinks')
+
 /*
 * Admin
 */
 //TODO: Build a more robust Admin Interface ¯\_(ツ)_/¯
-Route.get('admin/:password/users', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    return await User.all();
-});
-
-Route.get('admin/:password/kills', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    return await Kill.all();
-});
-
-Route.get('admin/:password/kills/:id/approve', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    let kill = await Kill.find(params.id);
-    kill.is_approved_by_admin = true;
-    return await kill.save()
-});
-
-Route.get('admin/:password/games', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    return await Game.query().with('kills').fetch()
-});
-
-Route.get('admin/:password/games/:id', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    const game = await Game.query().where('id', params.id).with('kills').fetch();
-    return await game.toJSON();
-});
-
-Route.get('admin/:password/games/:id/graph', async ({params}) => {
-    if (!adminAuth(params.password))
-        return 'Unauthorized';
-
-    const game = await Game.find(params.id)
-    const kills = (await game.kills().fetch()).rows;
-    return kills.map(k => `${k.killer_id}:${k.victim_id}`);
-})
-
-function adminAuth(password) {
-    return password === Env.get('ADMIN_PASSWORD');
-}
-
-
-/**
- * API/DEBUG
- */
-
-if (process.env.ENV == 'dev') {
-
-    Route.get('api/users', async () => {
+Route.group(() => {
+    Route.get('/users', async () => {
         return await User.all();
-    })
+    });
 
-    Route.get('api/tokens', async () => {
-        return await Token.all()
-    })
+    Route.get('/kills', async () => {
+        return await Kill.all();
+    });
 
-    Route.get('api/games', async () => {
+    Route.get('/kills/:id/approve', async ({params}) => {
+        let kill = await Kill.find(params.id);
+        kill.is_approved_by_admin = true;
+        return await kill.save()
+    });
+
+    Route.get('/games', async () => {
         return await Game.query().with('kills').fetch()
-    })
+    });
 
-    Route.get('api/kills', async () => {
-        return await Kill.all()
-    })
 
-    Route.post('api/games', async ({request, auth}) => {
-        const gameData = request.only(['name'])
-        const game = await Game.create(gameData);
-        return await auth.user.games().save(game)
-    })
+    Route.get('/games/:id', async ({params}) => {
+        const game = await Game.query().where('id', params.id).with('kills').fetch();
+        return await game.toJSON();
+    });
 
-    Route.get('api/games/:id/start', async ({params}) => {
+    Route.get('/games/:id/graph', async ({params}) => {
         const game = await Game.find(params.id)
-
-        if (game.started_at)
-            return 'Game already started';
-
-        return await game.start();
+        const kills = (await game.kills().fetch()).rows;
+        return kills.map(k => `${k.killer_id}:${k.victim_id}`);
     })
 
-
-
-
-    Route.post('api/games/:id/kills', async ({request, auth, params}) => {
-        try {
-            // If user has already submitted a kill for this game, return.
-            const existing = await Kill.query().where('user_id', auth.user.id).where('game_id', params.id).fetch();
-            if (existing.rows.length)
-                return console.log('Already existing kill for user and game id.');
-
-            // Otherwise, save kill.
-            const killData = request.only(['description'])
-            const game = await Game.find(params.id)
-            const kill = await game.kills().create(killData);
-            return await auth.user.kills().save(kill)
-
-        } catch (e) {
-            console.log(e)
-            return;
-        }
-    })
-
-
-
-
-    Route.get('api/games/:id/kills/start', async ({params}) => {
-
-        console.log("Entering start API");
-        const game = await Game.find(params.id)
-
-        try {
-            // If game did not start yet, start and return game.
-            if (!game.started_at)
-                return await game.start();
-        } catch (e) {
-            console.log(e);
-        }
-
-        console.log(game.started_at);
-        // Otherwise, return game.
-        return await game.kills().fetch();
-    })
-
-
-}
+  }).middleware(['admin']).prefix('/admin/:password')
