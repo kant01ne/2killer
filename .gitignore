@@ -17,3 +17,5 @@ database/development.sqlite
 .history
 .idea
 .editorconfig
+server.key
+server.crt

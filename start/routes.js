@@ -88,7 +88,7 @@ Route.group(() => {
     Route.get('/games/:id/graph', async ({params}) => {
         const game = await Game.find(params.id)
         const kills = (await game.kills().fetch()).rows;
-        return kills.map(k => `${k.killer_id}:${k.victim_id}`);
+        return kills.map(k => `${k.killer_id}:${k.victim_id}:${k.description}`);
     })
 
   }).middleware(['admin']).prefix('/admin/:password')

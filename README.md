@@ -24,12 +24,15 @@ sudo mysql -u root
 
 ```bash
 vim .env
+```
+
+```
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 HOST=IP
 PORT=80
-BASE_URL=http://da-killa.xyz
+BASE_URL=https://thekiller.xyz
 ADMIN_PASSWORD="<RANDOM_LONG_PASSWORD_TO_MANAGE_ADMIN_INTERFACE>"
 APP_KEY="<RANDOM_AS_LONG_AS_APP_KEY>"
 GAME_SECRET="<RANDOM_AS_LONG_AS_APP_KEY>"
