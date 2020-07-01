@@ -27,8 +27,9 @@ if (ENV == 'prod') {
   const fs = require('fs')
   const https = require('https')
   const options = {
-    key: fs.readFileSync(path.join(__dirname, './server.key')),
-    cert: fs.readFileSync(path.join(__dirname, './server.crt'))
+    key: fs.readFileSync(path.join(__dirname, './ssl/server.key')),
+    ca: fs.readFileSync(path.join(__dirname, './ssl/server.ca-bundle')),
+    cert: fs.readFileSync(path.join(__dirname, './ssl/server.crt'))
   }
 
   // Create the Https secure server.

@@ -29,32 +29,34 @@ const {bgColors, getRandomItem} = require('../utils/misc.js')
 /**
  * App
  */
-Route.get('/', 'GameController.index');
-Route.post('/game', 'GameController.store').as('game')
-Route.post('/games/new', 'GameController.new').as('game.new')
-Route.post('/games/:id/start', 'GameController.start').as('game.start')
-Route.get('/g/:encrypted', 'GameController.index')
+Route.group(() => {
 
-Route.post('/kills/suggest', async ({response, request}) => {
-    const killData = request.only(['description'])
-    const kill = await Kill.create(killData);
-    const game = await Game.find(request.body.game_id)
-    
-    return response.redirect(`/g/${game.encrypt()}`)
-}).as('kill.suggest')
+    /* Main Routes */
+    Route.get('/', 'GameController.index');
+    Route.post('/game', 'GameController.store').as('game')
+    Route.post('/games/new', 'GameController.new').as('game.new')
+    Route.post('/games/:id/start', 'GameController.start').as('game.start')
+    Route.get('/g/:encrypted', 'GameController.index')
+    Route.post('/kills/suggest', async ({response, request}) => {
+        const killData = request.only(['description'])
+        const kill = await Kill.create(killData);
+        const game = await Game.find(request.body.game_id)
+        
+        return response.redirect(`/g/${game.encrypt()}`)
+    }).as('kill.suggest')
+    Route.get('/doc', ({view}) => {
+        const backgroundColor = getRandomItem(bgColors)
+        return view.render('doc', {
+            backgroundColor
+        })
+    });
 
-Route.get('/doc', ({view}) => {
-    const backgroundColor = getRandomItem(bgColors)
-    return view.render('doc', {
-        backgroundColor
-    })
-});
+    /* .well-known */
+    Route.on('/.well-known/security.txt').render('security')
+    Route.on('/.well-known/robots.txt').render('robots')
+    Route.on('/.well-known/assetlinks.json').render('assetlinks')
 
-
-/* .well-known */
-Route.on('/.well-known/security.txt').render('security')
-Route.on('/.well-known/robots.txt').render('robots')
-Route.on('/.well-known/assetlinks.json').render('assetlinks')
+}).middleware(['logs']);
 
 /*
 * Admin
