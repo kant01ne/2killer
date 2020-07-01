@@ -69,7 +69,7 @@ class GameController {
 
         // No game.
         if (!params.encrypted) {
-            return view.render('welcome', {
+            return view.render('welcome2', {
                 username: auth.user.username,
                 killSuggestion,
                 backgroundColor
@@ -90,7 +90,7 @@ class GameController {
         const isUpdateKill =  request._qs && request._qs.updateKill;
         const isSuggestKill =  request._qs && request._qs.suggestKill;
 
-        return view.render('welcome', {
+        return view.render('welcome2', {
             game: game.toJSON(),
             username: auth.user.username,
             minPlayers: Game.minPlayers(),
