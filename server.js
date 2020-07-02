@@ -26,6 +26,8 @@ if (ENV == 'prod') {
   const path = require('path')
   const fs = require('fs')
   const https = require('https')
+  const http = require('http');
+
   const options = {
     key: fs.readFileSync(path.join(__dirname, './ssl/server.key')),
     ca: fs.readFileSync(path.join(__dirname, './ssl/server.ca-bundle')),
@@ -41,7 +43,6 @@ if (ENV == 'prod') {
     .catch(console.error)
   
   // Redirect from http port 80 to https
-  var http = require('http');
   http.createServer(function (req, res) {
       res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
       res.end();
