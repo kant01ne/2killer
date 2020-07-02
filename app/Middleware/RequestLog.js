@@ -19,7 +19,7 @@ class RequestLog {
       url = url.replace(Env.get('ADMIN_PASSWORD'), 'p');
 
       const userAgent = (request.headers && request.headers()['user-agent']) || null;
-      const sessionValue = (req.headers.cookie && req.headers.cookie.split('adonis-session-values=')[1].slice(0,15)) || null
+      const sessionValue = (req.headers.cookie && req.headers.cookie.split('adonis-session-values=')[1] && req.headers.cookie.split('adonis-session-values=')[1].slice(0,15)) || null
       logs({
         type: 'request',
         method: req.method,

@@ -56,17 +56,19 @@ class Game extends Model {
             // Choose a random step for killers and victim.
             // Make sure they are different from each other.
             // Make sure they are different from 0 => Avoid Own Kill or Victim's kill.
-            const killerStep = Math.floor(Math.random() * players.length - 2) + 1;
+            const killerStep = Math.floor(Math.random() * (players.length - 1)) + 1;
             let victimStep;
             do {
-                victimStep = Math.floor(Math.random() * players.length - 2) + 1
+                victimStep = Math.floor(Math.random() * (players.length - 1)) + 1
             } while (victimStep === killerStep)
+
+            console.log('----New Assignment-----');
 
             // Assign killers and victims to kills.
             await Promise.all(kills.map((kill, i) => {
                 const victimId = (i + players.length + victimStep) % players.length;
                 const killerId = (i + players.length + killerStep) % players.length;
-                console.log(killerId, victimId)
+                console.log(i, killerStep, victimStep, killerId, victimId)
                 return Promise.all([
                     kills[i].killer().associate(players[killerId]).catch(console.log),
                     kills[i].victim().associate(players[victimId]).catch(console.log)

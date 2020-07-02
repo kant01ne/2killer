@@ -10,7 +10,7 @@ class ExceptionHandler {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({req, request}, next) {
+  async handle ({req}, next) {
     try {
       await next()
     } catch (e) {

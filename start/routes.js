@@ -93,7 +93,7 @@ Route.group(() => {
     Route.get('/games/:id/graph', async ({params, response}) => {
         const game = await Game.find(params.id)
         const kills = (await game.kills().fetch()).rows;
-        return response.ok(kills.map(k => `${k.killer_id}:${k.victim_id}`));
+        return response.ok(kills.map(k => `${k.killer_id} => ${k.victim_id} (${k.user_id})`));
     })
 
     Route.get('/games/:id/graph_with_pii', async ({params, response}) => {
