@@ -42,7 +42,7 @@ class RequestLog {
         statusCode: res.statusCode,
         url,
         username,
-        params,
+        params: p,
         body,
         userAgent
       });
