@@ -5,7 +5,7 @@ const {logs} = require('../../utils/logs.js')
 const Env = use('Env')
 
 class RequestLog {
-  async handle ({req, request, res, response, params}, next) {
+  async handle ({req, request, res, auth, params}, next) {
     try {
 
       // Upstream Middleware.
@@ -17,6 +17,7 @@ class RequestLog {
       delete p['password']
       let url = req.url;
       url = url.replace(Env.get('ADMIN_PASSWORD'), 'p');
+      const username = (auth && auth.user && auth.user.username) || null;
 
       const userAgent = (request.headers && request.headers()['user-agent']) || null;
       const sessionValue = (req.headers.cookie && req.headers.cookie.split('adonis-session-values=')[1] && req.headers.cookie.split('adonis-session-values=')[1].slice(0,15)) || null
@@ -24,6 +25,7 @@ class RequestLog {
         type: 'request',
         method: req.method,
         url,
+        username,
         adonis_session_value: sessionValue,
         params: p,
         body,
@@ -39,6 +41,7 @@ class RequestLog {
         adonis_session_value: sessionValue,
         statusCode: res.statusCode,
         url,
+        username,
         params,
         body,
         userAgent

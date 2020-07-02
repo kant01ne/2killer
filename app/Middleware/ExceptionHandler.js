@@ -10,18 +10,20 @@ class ExceptionHandler {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle ({req}, next) {
+  async handle ({req, auth}, next) {
     try {
       await next()
     } catch (e) {
       let url = req.url;
       url = url.replace(Env.get('ADMIN_PASSWORD'), 'p');
+      const username = (auth && auth.user && auth.user.username) || null;
       const sessionValue = (req.headers.cookie && req.headers.cookie.split('adonis-session-values=')[1].slice(0,15)) || null
       logs({
         type:'Exception',
         method: req.method,
         sessionValue,
         url,
+        username,
         error: e
       })
       return next() // Return status code.
