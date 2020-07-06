@@ -3,7 +3,7 @@ const User = use('App/Models/User')
 const Game = use('App/Models/Game')
 const Kill = use('App/Models/Kill')
 const _ = use('underscore');
-const {bgColors, getRandomItem} = require('../../../utils/misc.js')
+const {getRandomItem, getRandomInt} = require('../../../utils/misc.js')
 
 
 const BASE_URL = process.env.BASE_URL;
@@ -65,14 +65,14 @@ class GameController {
 
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion();
-        const backgroundColor = getRandomItem(bgColors)
+        const backgroundImg = getRandomInt(5) + 1;
 
         // No game.
         if (!params.encrypted) {
-            return view.render('welcome2', {
+            return view.render('welcome', {
                 username: auth.user.username,
                 killSuggestion,
-                backgroundColor
+                backgroundImg
             })
         }
         // Otherwise, load existing Game data.
@@ -90,7 +90,7 @@ class GameController {
         const isUpdateKill =  request._qs && request._qs.updateKill;
         const isSuggestKill =  request._qs && request._qs.suggestKill;
 
-        return view.render('welcome2', {
+        return view.render('welcome', {
             game: game.toJSON(),
             username: auth.user.username,
             minPlayers: Game.minPlayers(),
@@ -106,7 +106,7 @@ class GameController {
             isUpdateKill,
             isSuggestKill,
             killSuggestion,
-            backgroundColor
+            backgroundImg
         })
     }
 }

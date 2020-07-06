@@ -29,6 +29,7 @@
     "async": "^3.1.0",
     "domains": "^1.1.4",
     "humio": "^0.4.0-beta2",
+    "materialize-css": "^1.0.0-rc.2",
     "mssql": "^5.1.0",
     "mysql": "^2.18.1",
     "underscore": "^1.9.1"

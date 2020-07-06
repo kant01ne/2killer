@@ -49,5 +49,6 @@ function copyToClipboard(elem) {
         // clear temporary content
         target.textContent = "";
     }
+    M.toast({html: 'Lien copié dans le presse papier', classes:'green'});
     return succeed;
 }
