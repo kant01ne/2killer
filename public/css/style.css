@@ -7,7 +7,7 @@
  */
 
 body {
-   background-color:#f3f3f3;
+  background: linear-gradient(180deg,#555566 0,#000000);
 }
 
 nav ul a,
