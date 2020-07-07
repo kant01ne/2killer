@@ -3,7 +3,7 @@ const User = use('App/Models/User')
 const Game = use('App/Models/Game')
 const Kill = use('App/Models/Kill')
 const _ = use('underscore');
-const {getRandomItem, getRandomInt} = require('../../../utils/misc.js')
+const {getRandomInt} = require('../../../utils/misc.js')
 
 
 const BASE_URL = process.env.BASE_URL;

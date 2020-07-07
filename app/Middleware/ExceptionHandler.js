@@ -2,6 +2,9 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
+/** @type {import('@adonisjs/framework/src/Env')} */
+const Env = use('Env');
+
 const {logs} = require('../../utils/logs.js')
 
 class ExceptionHandler {
@@ -12,7 +15,7 @@ class ExceptionHandler {
    */
   async handle ({req, auth}, next) {
     try {
-      await next()
+      await next();
     } catch (e) {
       let url = req.url;
       url = url.replace(Env.get('ADMIN_PASSWORD'), 'p');
@@ -25,7 +28,7 @@ class ExceptionHandler {
         url,
         username,
         error: e
-      })
+      });
       return next() // Return status code.
     }
   }

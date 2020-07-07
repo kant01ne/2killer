@@ -41,7 +41,8 @@ Route.post('/kills/suggest', async ({response, request}) => {
     const game = await Game.find(request.body.game_id)
     
     return response.redirect(`/g/${game.encrypt()}`)
-}).as('kill.suggest')
+}).as('kill.suggest');
+
 Route.get('/doc', ({view}) => {
     const backgroundColor = getRandomItem(bgColors)
     return view.render('doc', {
@@ -59,6 +60,12 @@ Route.on('/.well-known/assetlinks.json').render('assetlinks')
 */
 //TODO: Build a more robust Admin Interface ¯\_(ツ)_/¯
 Route.group(() => {
+    Route.get('/', 'AdminController.games');
+    Route.get('/game/:id', 'AdminController.game');
+    Route.get('/game/:id/restart', 'AdminController.restartGame');
+    Route.get('/kills', 'AdminController.kills');
+    Route.get('/kills/:id/approve', 'AdminController.approveKill');
+
     Route.get('/users', async ({response}) => {
         return response.ok(await User.all());
     });

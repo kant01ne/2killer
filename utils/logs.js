@@ -17,11 +17,12 @@ const humio = new Humio({
 
 async function logs (json) {
     // If Dev Env, return.
-    if (Env.get('ENV') == "dev")
+    if (Env.get('ENV') == "dev") {
+        console.log("LOGS\n", json);
         return;
+    }
 
     // Otherwise, log.
-    console.log("Sending logs to Humio:", json);
     try {
         await humio.sendJson(json);
     } catch (e) {

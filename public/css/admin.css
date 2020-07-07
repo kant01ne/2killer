@@ -7,7 +7,8 @@
  */
 
 body {
-  background: linear-gradient(180deg,#000000 0,#555566);
+  /* background: linear-gradient(180deg,#000000 0,#555566); */
+  background:#555566;
 }
 
 nav ul a,
@@ -20,44 +21,6 @@ nav .brand-logo {
   position: relative;
   top: 50px;
   height: 78px;
-}
-
-
-.messenger {
-  position: relative;
-  top: 50px;
-}
-
-
-/*
-Clipboard Button
-*/
-
-.clipboardButton {
-  margin-top: 50px;
-	background-color:transparent;
-	cursor:pointer;
-  color:#ffffff;
-  padding: 45px;
-	font-size:24px;
-  text-decoration:none;
-}
-.clipboardButton:hover {
-	background-color:transparent;
-}
-.clipboardButton:active {
-	position:relative;
-	top:1px;
-}
-
-.clipboardButton:disabled {
-	border-color: #a59e9e;
-	color:#a59e9e;
-}
-
-
-.clipboard {
-  background: url("/images/clipboard.svg") no-repeat;
 }
 
 p {
@@ -111,6 +74,13 @@ input {
 }
 
 textarea {
-  min-height: 49px !important;
   color: white;
+}
+
+tr {
+  cursor:pointer;
+}
+
+table.striped>tbody>tr:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.5);
 }

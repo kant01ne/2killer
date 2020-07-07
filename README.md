@@ -16,6 +16,8 @@ sudo mysql -u root
     create database adonis;
 ```
 
+MACOS DB issues: https://gist.github.com/vitorbritto/0555879fe4414d18569d
+
 ## Env
 
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Jeu du killer: Effectuer l'attribution des kills"/>
+  <meta name="googlebot" content="Jeu de role, le killer, jeu du killer, role game play, jeu killer, jeu entre amis, killer"/>
+  <meta name="robots" content="Jeu de role, le killer, jeu du killer, role game play, jeu killer, jeu entre amis, killer"/>
+  <title>The Killer - Jeu de rôle</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/css/admin.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey-text text-lighten-3">
+  <nav class="blue-grey darken-4" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="/" class="brand-logo">The Killer</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="{{ route('AdminController.kills', { password: p}) }}">Kills</a></li>
+        <li><a href="{{ route('AdminController.games', { password: p}) }}">Games</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="/">Home</a></li>
+        <li><a href="{{ route('AdminController.kills', { password: p}) }}">Kills</a></li>
+        <li><a href="{{ route('AdminController.games', { password: p}) }}">Games</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section">
+      <table class="striped highlight centered responsive-table">
+        <thead>
+          <tr>
+              <th>Id</th>
+              <th>Owner</th>
+              <th>Players</th>
+              <th>Created At</th>
+              <th>Started At</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(game in games)
+          <tr onClick="window.location.pathname = '{{ route('AdminController.game', { password: p, id: game.id }) }}'">
+              <td>{{game.id}}</td>
+              <td>{{game.owner.username}}</td>
+              <td>{{game.kills.length}}</td>
+              <td>{{game.created_at}}</td>
+              <td>{{game.started_at}}</td>
+          </tr>
+          @endeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="/js/init.js"></script>
+  <script src="/js/materialize.min.js"></script>
+  </body>
+</html>
