@@ -17,4 +17,5 @@ database/development.sqlite
 .history
 .idea
 .editorconfig
-ssl/*
+ssl
+secrets
