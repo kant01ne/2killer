@@ -46,7 +46,7 @@ class Game extends Model {
         return await Game.find(id)
     }
 
-    async start (restart) {
+    async start () {
         try {
             // Fetch all kills, shuffle.
             let kills = await _.shuffle((await this.kills().fetch()).rows);
@@ -82,8 +82,7 @@ class Game extends Model {
         }
     }
 
-    encrypt () {
-        // TODO user cypheriv
+    encrypt() {
         let cipher = crypto.createCipher('aes-256-ctr', Env.get('GAME_SECRET'))
         let crypted = cipher.update(JSON.stringify({
             id: this.id,
@@ -104,6 +103,15 @@ class Game extends Model {
     owner () {
         return this.belongsTo('App/Models/User')
     }
+
+    static get computed () {
+        return ['encrypted']
+      }
+    
+    getEncrypted () {
+        return this.encrypt();
+      }
+
 }
 
 module.exports = Game

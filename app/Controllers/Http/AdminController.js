@@ -62,7 +62,7 @@ class AdminController {
 
     async restartGame ({params, view}) {
         const game = await Game.find(params.id)
-        await game.start(true);
+        await game.start();
         const kills = (
             await game.kills()
                 .with('owner')

@@ -34,7 +34,7 @@
 
   <div class="container">
     <div class="section">
-      <table class="striped highlight centered responsive-table">
+      <table class="striped highlight centered">
         <thead>
           <tr>
               <th>Id</th>
@@ -75,6 +75,8 @@
         <a href="{{ route('AdminController.restartGame', { password: p, id: game.id }) }}" class="btn waves-effect waves-light btn-large red accent-4" type="submit" name="action">Reshuffle
           <i class="material-icons right">refresh</i>
         </a>
+        <td><a target="_blank" href="/g/{{game.encrypted}}">Go to Game.</a></td>
+
       </div>
     @endif
   </div>

@@ -5,8 +5,9 @@ const Kill = use('App/Models/Kill')
 const _ = use('underscore');
 const {getRandomInt} = require('../../../utils/misc.js')
 
-
 const BASE_URL = process.env.BASE_URL;
+const BACKGROUND_IMG_NB = 5;
+
 
 class GameController {
     async store ({request, response, auth}) {
@@ -51,7 +52,7 @@ class GameController {
     
         if (!game.started_at)
             await game.start();
-
+        console.log(game.getEncrypted());
         return response.redirect(`/g/${game.encrypt()}`)
     }
 
@@ -59,13 +60,12 @@ class GameController {
     async new ({response, auth}) {
         const game = await Game.create();
         await auth.user.games().save(game)
-
         return response.redirect(`/g/${game.encrypt()}`)
     }
 
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion();
-        const backgroundImg = getRandomInt(5) + 1;
+        const backgroundImg = getRandomInt(BACKGROUND_IMG_NB) + 1;
 
         // No game.
         if (!params.encrypted) {
@@ -108,6 +108,14 @@ class GameController {
             killSuggestion,
             backgroundImg
         })
+    }
+
+    async suggestKill ({response, request}) {
+        const killData = request.only(['description'])
+        await Kill.create(killData);
+        const game = await Game.find(request.body.game_id)
+        
+        return response.redirect(`/g/${game.encrypt()}`)
     }
 }
 
