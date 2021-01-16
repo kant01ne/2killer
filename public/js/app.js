@@ -1,6 +1,10 @@
-document.getElementById("copyButton").addEventListener("click", function() {
-    copyToClipboard(document.getElementById("copyTarget"));
-});
+const copyClipboardElement = document.getElementById("copyButton");
+
+if (copyClipboardElement) {
+    copyClipboardElement.addEventListener("click", function() {
+        copyToClipboard(document.getElementById("copyTarget"));
+    });
+}
 
 function copyToClipboard(elem) {
 	  // create hidden text element, if it doesn't already exist
@@ -49,6 +53,29 @@ function copyToClipboard(elem) {
         // clear temporary content
         target.textContent = "";
     }
-    M.toast({html: 'Lien copié dans le presse papier', classes:'green'});
+    document.getElementById("copied").style["display"] = "flex";
+    setTimeout(() => document.getElementById("copied").style["display"] = "none", 5000);
     return succeed;
 }
+
+var cssTypingElements = $(".css-typing-hidden");
+
+async function typing () {
+    for (let i = 0; i < cssTypingElements.length; i++) {
+        const content = cssTypingElements[i].innerHTML
+        var ele = '<span>' + content.split('').join('</span><span>') + '</span>';
+      
+
+        $(ele).hide().appendTo(`.css-typing:eq(${i})`).each(function (i) {
+            $(this).delay(70 * i).css({
+                display: 'inline',
+                opacity: 0
+            }).animate({
+                opacity: 1
+            }, 70);
+        });
+        await new Promise(r => setTimeout(r, 5000));
+      }
+}
+
+typing();

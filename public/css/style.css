@@ -7,25 +7,25 @@
  */
 
 body {
-  background: linear-gradient(180deg,#000000 0,#555566);
+  background: linear-gradient(180deg,#000000 0,#46464c);
+  color: white;
 }
 
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  min-height: 100vh;
+  /*This part is important for centering*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 nav ul a,
 nav .brand-logo {
   color: #b1b1b1;
-}
-
-
-.whatsapp {
-  position: relative;
-  top: 50px;
-  height: 78px;
-}
-
-
-.messenger {
-  position: relative;
-  top: 50px;
 }
 
 
@@ -34,13 +34,11 @@ Clipboard Button
 */
 
 .clipboardButton {
-  margin-top: 50px;
-	background-color:transparent;
 	cursor:pointer;
   color:#ffffff;
+  text-decoration:none;
   padding: 45px;
 	font-size:24px;
-  text-decoration:none;
 }
 .clipboardButton:hover {
 	background-color:transparent;
@@ -57,54 +55,12 @@ Clipboard Button
 
 
 .clipboard {
-  background: url("/images/clipboard.svg") no-repeat;
+  background: url("/images/clipboard.svg") no-repeat !important;
 }
 
 p {
   line-height: 2rem;
 }
-
-.sidenav-trigger {
-  color: #26a69a;
-}
-
-.parallax-container {
-  min-height: 380px;
-  line-height: 0;
-  height: auto;
-  color: rgba(255,255,255,.9);
-}
-  .parallax-container .section {
-    width: 100%;
-  }
-
-@media only screen and (max-width : 992px) {
-  .parallax-container .section {
-    position: absolute;
-    top: 40%;
-  }
-  #index-banner .section {
-    top: 10%;
-  }
-}
-
-@media only screen and (max-width : 600px) {
-  #index-banner .section {
-    top: 0;
-  }
-}
-
-.icon-block {
-  padding: 0 15px;
-}
-.icon-block .material-icons {
-  font-size: inherit;
-}
-
-footer.page-footer {
-  margin: 0;
-}
-
 
 input {
   color:white;
@@ -114,3 +70,250 @@ textarea {
   min-height: 49px !important;
   color: white;
 }
+
+.css-typing-hidden {
+  display: none;
+}
+
+.css-typing {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+body {
+  font-family: 'Source Code Pro', monospace;  
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+.button,
+input[type="submit"]{
+	cursor: pointer;
+    border-radius: 0px;
+    text-decoration: none;
+    padding: 12px 18px;
+    font-size: 12px;
+    line-height: 19px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif; font-weight:400;
+    letter-spacing: 3px;
+}
+
+.button-white{
+  border:solid 2px #fff;
+  background: transparent;
+  color: #fff !important;
+}
+.button-white:hover{
+  border:solid 2px #fff;
+  background: #fff;
+  color: #1f1f1f !important;
+}
+
+
+@keyframes fadeIn {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+  }
+  70% {
+    visibility: visible;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.start {
+  margin-top: 1.5em;
+  margin-bottom: 2.5em;
+  max-width: 75vw;
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  text-align: center;
+  justify-content: center;
+}
+
+
+.delay-4s {
+  animation-fill-mode: forwards;
+  animation: 4s fadeIn;
+}
+
+.delay-6s {
+  animation-fill-mode: forwards;
+  animation: 6s fadeIn;
+}
+
+.delay-8s {
+  animation-fill-mode: forwards;
+  animation: 8s fadeIn;
+}
+
+a {
+  color: white;
+  text-decoration: underline;
+}
+
+.delay-28s {
+  animation-fill-mode: forwards;
+  animation: 28s fadeIn;
+}
+
+#copied {
+  display:none;
+  margin-bottom: 1.5rem;
+}
+
+
+/* Estrutura */
+.form {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 4rem;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 3rem;
+  margin-bottom: 3rem;
+}
+
+.input {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid #9e9e9e;
+  outline: none;
+  transition: .2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.label {
+  top: 0;
+  left: 0; right: 0;
+  color: #616161;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  font-size: 1rem;
+  cursor: text;
+  transition: .2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.input,
+.label {
+  width: 100%;
+  height: 3rem;
+  font-size: 1rem;
+}
+
+/* Interation */
+.input:valid,
+.input:focus {
+  border-bottom: 2px solid #ffffff;  
+}
+
+.input:valid + label,
+.input:focus + label {
+  color: #ffffff;
+  font-size: .8rem;
+  top: -30px;
+  pointer-events: none;
+}
+
+
+.input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  visibility: hidden;
+}
+
+.input:focus::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  visibility: visible;
+}
+
+.margin-3rem {
+ margin-top: 3rem;
+}
+
+
+.margin-1rem {
+  margin-top: 1rem;
+ }
+ 
+
+.sm {
+  font-size: 18px;
+}
+
+.xs {
+  font-size: 14px;
+}
+
+  
+  /* Smartphones (portrait and landscape) ----------- */
+  @media only screen 
+  and (min-device-width : 320px) 
+  and (max-device-width : 480px) {
+  /* Styles */
+  }
+
+  /* Smartphones (landscape) ----------- */
+  @media only screen 
+  and (min-width : 321px) {
+  /* Styles */
+  }
+
+  /* Smartphones (portrait) ----------- */
+  @media only screen 
+  and (max-width : 320px) {
+  /* Styles */
+  }
+
+  /* iPads (portrait and landscape) ----------- */
+  @media only screen 
+  and (min-device-width : 768px) 
+  and (max-device-width : 1024px) {
+  /* Styles */
+  }
+
+  /* iPads (landscape) ----------- */
+  @media only screen 
+  and (min-device-width : 768px) 
+  and (max-device-width : 1024px) 
+  and (orientation : landscape) {
+  /* Styles */
+  }
+
+  /* iPads (portrait) ----------- */
+  @media only screen 
+  and (min-device-width : 768px) 
+  and (max-device-width : 1024px) 
+  and (orientation : portrait) {
+  /* Styles */
+  }
+
+  /* Desktops and laptops ----------- */
+  @media only screen 
+  and (min-width : 1224px) {
+  /* Styles */
+  }
+
+  /* Large screens ----------- */
+  @media only screen 
+  and (min-width : 1824px) {
+  /* Styles */
+  }
+
+  /* iPhone 4 ----------- */
+  @media
+  only screen and (-webkit-min-device-pixel-ratio : 1.5),
+  only screen and (min-device-pixel-ratio : 1.5) {
+  /* Styles */
+  }

@@ -10,394 +10,188 @@
   <title>The Killer - Jeu de rôle</title>
 
   <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-167446947-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-167446947-2');
-  </script>
-
 </head>
-<body class="grey-text  text-lighten-3">
-  <nav class="blue-grey darken-4" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="/" class="brand-logo">The Killer</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a onClick="window.contact()">Contact</a></li>
-      </ul>
-
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="/">Home</a></li>
-        <li><a onClick="window.contact()" href="#">Contact</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </div>
-  </nav>
-
-  @if(!game)
-    <div id="index-banner" class="parallax-container">
-      <div class="section no-pad-bot">
-        <div class="container">
-          <h1 class="header center blue-grey-text text-lighten-2">Jeu du Killer</h1>
-          <div class="row center">
-            <h5 class="header col s12 light">Jouer au killer sans maitre du jeu</h5>
-            <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
-              {{ csrfField() }}
-              <button id="download-button" type="submit" class="btn-large waves-effect waves-light blue-grey darken-3">Commencer</button>
-            </form>
-          </div>
+<body class="grey-text text-lighten-3">
+  <div class="container">
+      
+    @if(!game)
+        <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
+          {{ csrfField() }}
+          <div class="css-typing-hidden">
+            Do you have what it takes to kill all of your friends ?
+         </div>
+         <div class="css-typing"></div>
+        <div class="start delay-8s">
+          <button id="start" type="submit" class="start button button-white">Start</button>
         </div>
-      </div>
-      <div class="parallax"><img src="/images/assassin_{{backgroundImg}}.jpg" alt="Killer"></div>
-    </div>
-  @endif
-
-  @if(!game)
-    <div class="container">
-      <div class="section">
-
-        <!--   Icon Section   -->
-        <div class="row">
-          <div class="col s12 m4">
-            <div class="icon-block">
-              <h2 class="center brown-text"><i class="material-icons">psychology</i></h2>
-              <h5 class="center">Jeu du Killer</h5>
-
-              <p class="light">Au début de la partie chaque joueur renseigne un kill. Un bon kill est une action amusante, parfois contraignante, mais réalisable. Soyez créatif!
-          Lorsque tous les joueurs sont prêts, chacun se voit attribuer un kill et une victime.</p>
-            </div>
-          </div>
-
-          <div class="col s12 m4">
-            <div class="icon-block">
-              <h2 class="center brown-text"><i class="material-icons">whatshot</i></h2>
-              <h5 class="center">Règles</h5>
-
-              <p class="light">Pour effectuer son kill, un killer doit convaincre sa victime de réaliser l'action qui lui aura été attribuée.
-          Lorsqu'un killer effectue son kill, il récupère le kill et la victime de la personne qu'il vient de killer.</p>
-            </div>
-          </div>
-
-          <div class="col s12 m4">
-            <div class="icon-block">
-              <h2 class="center brown-text"><i class="material-icons">sports_esports</i></h2>
-              <h5 class="center">Maitre du jeu</h5>
-
-              <p class="light">A l'origine, pour jouer au killer, un maitre du jeu était nécéssaire. L'attribution des kills ne pouvait pas s'effectuer de manière totalement aléatoire... Maintenant, c'est possible.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
+        </form>
     @endif
 
-
-  <div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <div class="row center">
-          <h5 class="header col s12 light">Le but du jeu est simplement d'être le dernier survivant.</h5>
+    <!--Game Part -->
+    @if(game)
+      @if(isGameOwner && !startedAt)
+          <div class="css-typing-hidden">
+            Share this link with your group
+          </div>
+          <div class="css-typing"></div>
+          <div class="start delay-4s">
+            <div id="copyTarget" hidden>{{link}}</div>
+            <div id="copyButton" class="clipboardButton clipboard"></div>
         </div>
-      </div>
-    </div>
-    <div class="parallax"><img src="/images/assassin_{{backgroundImg}}.jpg" alt="Killer"></div>
-  </div>
+        <div id="copied">Copied!</div>
+      @endif
 
-  <!--Game Part -->
-  @if(game)
-    <div class="container">
-      <div class="section center">
-
-        @if(isGameOwner && !startedAt)
-          <p class="flow-text">Partage avec tes amis pour commencer la partie:</p>
-          <div class="row center">
-            <div class="col offset-l3 l2 s4">
-              <div id="copyTarget" hidden>{{link}}</div>
-              <div id="copyButton" class="clipboardButton clipboard"></div>
-            </div>
-            <div class="col l2 s4">
-              @if(isMobile)
-                <a class="messenger" href="fb-messenger://share?link={{link}}"><img style="height: 78px;" src="/images/messenger.svg"/></a>
-              @endif
-              
-              @if(!isMobile)
-                <a class="messenger" href="http://www.facebook.com/dialog/send?app_id=582407492655263&link={{link}}&redirect_uri={{link}}"><img style="height: 78px;" src="/images/messenger.svg"/></a>
-              @endif
-            </div>
-            <div class="col l2 s4">
-              <a class="whatsapp" href="https://api.whatsapp.com/send?text={{link}}" data-action="share/whatsapp/share"><img style="height: 78px;" src="/images/whatsapp.svg"/></a>
-            </div>
-          </div>
-        @endif
-
-
-        @if(!startedAt && killers && killers.length > 0)
-          <br/>
-          <p class="flow-text">Les killers prêts à en découdre:</p>
-          <div class="row">
-            <div class="col offset-m3 m6 s12">
-              <div class="collection">
-                @each(killer in killers)
-                  @if(killer == username)
-                    <a class="collection-item blue-grey darken-2 white-text">{{killer}}</a>
-                  @else
-                    <a class="collection-item blue-grey darken-4 white-text">{{killer}}</a>
-                  @endif
-                @endeach
-              </div>
-            </div>
-          </div>
-
-          <br/>
-          <a href="#" onClick="window.location.reload()" class="btn-floating pulse blue-grey darken-4"><i class="material-icons">refresh</i></a>
-          <br/><br/>
-
-        @endif
+      @if(!isSuggestKill)
 
         @if(kill)
-          <div class="row">
-            <div class="col s12 offset-l3 l6">
-              <div class="card blue-grey darken-4">
-                <div class="card-content white-text">
-                  <span class="card-title">{{victim.username}}</span>
-                  <p>{{kill.description}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          @if(!isSuggestKill)
-            <div class="row">
-              <div class="col s12 m6 offset-m3">
-                <div class="card blue-grey lighten-3">
-                  <div class="card-content blue-grey-text text-darken-2">
-                    <span class="card-title">T'as une nouvelle idée de Kill?</span>
-                    <p>Partage la pour qu'on puisse la suggérer aux futurs participants en panne d'inspi.</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="?suggestKill=1" class="blue-grey-text text-darken-1">Go</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          @endif
+            <div class="css-typing-hidden">Your victim is</div>
+            <div class="css-typing sm"></div>
+            <div class="margin-3rem"></div>
+            <div class="css-typing-hidden">...</div>
+            <div class="css-typing"></div>
+            <div class="margin-3rem"></div>
+            <div class="css-typing-hidden">{{victim.username}}</div>
+            <div class="css-typing"></div>
+            <div class="margin-3rem"></div>
+            <div class="css-typing-hidden">You will have to</div>
+            <div class="css-typing sm"></div>
+            <div class="margin-3rem"></div>
+            <div class="css-typing-hidden">{{kill.description}}</div>
+            <div class="css-typing"></div>
+            <div></div>
+            <div class="margin-3rem"></div>
+            <div  class=" css-typing-hidden "> You have a new kill idea? Make sure to share it to inspire future players</div>
+            <a href="?suggestKill=1" class="css-typing xs underline"></a>
         @endif
+      @endif
 
-        @if(isSuggestKill)
-          <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
-            <div class="input-field col offset-m3 m6 s12">
-              <input name="description" placeholder="Le kill parfait pour une prochaine partie" value="" required type="text" class="validate">
-              <label for="description">Suggestion</label>
-            </div>
+      @if(isSuggestKill)
+        <form autocomplete="off" class="form" action="{{ route('kill.suggest') }}" method="POST">
+            <div class="input-container">
+              <input name="description" class="input" placeholder="Perfect kill idea for next time" id="description" required type="text" value="" class="validate" />
+              <label class="label" for="description">Suggestion</label>
+          </div>
+          {{ csrfField() }}
+          <input hidden name="game_id" value="{{ game.id }}"/>
+          <button class="start button button-white delay-6s" type="submit" name="action">Send
+          </button>  
+        </form>
+      @endif
+
+      @if(startedAt && !ownKill)
+
+        <div class="css-typing-hidden">This game has already started. If you opened the link in a new tab or a new browser, your data will be inaccessible. Make sure to open this link from the same browser you used the first time.</div>
+        <div class="css-typing"></div>
+
+        <div class="css-typing-hidden">If you would like to start a new game use the button below.</div>
+        <div class="css-typing"></div>
+
+        <div class="start">
+          <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
             {{ csrfField() }}
-            <input hidden name="game_id" value="{{ game.id }}"/>
-            <button class="btn waves-effect waves-light btn-large blue-grey darken-3" type="submit" name="action">Envoyer
-              <i class="material-icons right">send</i>
-            </button>  
+            <button class="start button buttton-white delay-6s" type="submit">Start</button>
           </form>
-        @endif
-
-        @if(startedAt && !ownKill)
-
-          <div class="row">
-            <div class="col s12 m6 offset-m3">
-              <div class="card deep-orange darken-4">
-                <div class="card-content white-text">
-                  <span class="card-title">Attention</span>
-                  <p>Cette partie à déjà commencé.</p>
-                  <p>Si tu as ouvert le lien dans un nouveau navigateur, tes données de kill sont innaccessible. Ouvre dans le même navigateur que tu as utilisé la première fois.</p>
-                  <p>Si tu souhaite relancer une nouvelle partie clique sur Commencer.</p>
-                </div>
-                <div class="card-action">
-                  <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
-                    {{ csrfField() }}
-                    <a type="submit">Commencer</a>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        @endif
-
-        @if(!isKillOwner || (isUpdateKill && !startedAt))
-          <form autocomplete="off" class="form" action="{{ route('game') }}" method="POST">
-
-            <div class="row center">
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col offset-m3 m6 s12">
-                    <input name="username"  placeholder="PiegeAMorue42" id="username" required type="text" value="{{username}}" class="validate">
-                    <label for="username">Ton blaze</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col offset-m3 m6 s12">
-                    <textarea name="description" placeholder="{{killSuggestion}}" value="{{ownKill.description || ''}}" required type="text" class="materialize-textarea">{{ownKill.description || ''}}</textarea>
-                    <label for="username">Ton kill</label>
-                  </div>
-                </div>
-
-                {{ csrfField() }}
-
-                <input hidden name="id" value="{{ game.id }}"/>
-                <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
-
-                @if(isUpdateKill)
-                  <button class="btn waves-effect waves-light btn-large blue-grey darken-3" type="submit" name="action">Modifier
-                    <i class="material-icons right">send</i>
-                  </button>
-                @else
-                  <button class="btn waves-effect waves-light btn-large blue-grey darken-3" type="submit" name="action">Envoyer
-                    <i class="material-icons right">send</i>
-                  </button>
-                @endif
-              </div>
-
-          </form>
-        @endif
-
-        @if(!isGameOwner && !startedAt)
-          <div class="row">
-            <div class="col s12 offset-l3 l6">
-              @if(killers.length < minPlayers)
-                <div class="card-panel blue-grey lighten-3">
-                  <span class="blue-grey-text text-darken-2 ">En attente d'au moins {{minPlayers - killers.length}} autre(s) personne(s)</span>
-                </div>
-              @else
-                @if(game)
-                  <div class="card-panel blue-grey lighten-3">
-                    <span class="blue-grey-text text-darken-2 ">En attente de lancement par le créateur de la partie...</span>
-                  </div>
-                @endif
-              @endif
-            </div>
-          </div>
-        @endif
-
-
-
-        @if(isGameOwner && !startedAt)
-          <br/><br/>
-          <div class="row">
-            <div class="col s12 offset-l3 l6">
-              <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
-                {{ csrfField() }}
-                <input hidden name="id" value="{{ game.id }}"/>
-                @if(killers.length < 3)
-                  <div class="card-panel blue-grey lighten-3">
-                    <span class="blue-grey-text text-darken-2 ">En attente d'au moins {{minPlayers - killers.length}} autre(s) personne(s)</span>
-                  </div>
-                @else
-                  @if(!isUpdateKill)
-                    <button type="submit" class="blue-grey darken-2 waves-effect waves-light btn btn-large">Prêt<i class="material-icons right">play_circle_outline</i></button>
-                  @endif
-                @endif
-              </form>
-            </div>
-          </div>
-        @endif
-
-
-        @if(!startedAt && !isUpdateKill && isKillOwner)
-          <br/>
-          <a href="?updateKill=1" class="blue-grey darken-4 waves-effect waves-light btn btn-small">Modifier mon kill<i class="material-icons right">update</i></a>
-        @endif
-
-      </div>
-    </div>
-
-    <!-- Styling Only -->
-    <div class="parallax-container valign-wrapper">
-    <div class="section no-pad-bot">
-      <div class="container">
-        <div class="row center">
-          <h5 class="header col s12 light">Le but du jeu est simplement d'être le dernier survivant.</h5>
         </div>
-      </div>
-    </div>
-    <div class="parallax"><img src="/images/assassin_{{backgroundImg}}.jpg" alt="Killer"></div>
+
+      @endif
+
+      @if(!isKillOwner || (isUpdateKill && !startedAt))
+        <div class="css-typing-hidden">
+          Write your kill below:
+        </div>
+        <div class="css-typing"></div>
+
+        <form autocomplete="off" class="form delay-6s " action="{{ route('game') }}" method="POST">
+            <div class="input-container">
+              <input name="username" class="input" placeholder="Fifou" id="username" required type="text" value="{{username}}" class="validate" />
+              <label class="label" for="username">Name</label>
+            </div>
+
+            <div class="input-container">
+              <input name="description" class="input" placeholder="{{killSuggestion}}" id="description" required type="text" value="{{ownKill.description || ''}}" class="validate" />
+              <label class="label" for="description">Kill</label>
+            </div>
+
+            {{ csrfField() }}
+            <input hidden name="id" value="{{ game.id }}"/>
+            <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
+
+            @if(isUpdateKill)
+              <button class="start button button-white" type="submit" name="action">Modify
+              </button>
+            @else
+              <button class="start button button-white" type="submit" name="action">Send
+              </button>
+            @endif
+        </form>
+      @endif
+
+      @if(!isGameOwner && !startedAt)
+          @if(killers.length < minPlayers)
+              <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)</div>
+              <div class="css-typing sm"></div>
+          @else
+            @if(game)
+                <div class="css-typing-hidden">Waiting for the game to start...</div>
+                <div class="css-typing sm"></div>
+            @endif
+          @endif
+      @endif
+
+      @if(isGameOwner && !startedAt)
+        <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
+          {{ csrfField() }}
+          <input hidden name="id" value="{{ game.id }}"/>
+          @if(killers.length < 3)
+            <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)</div>
+            <div class="css-typing sm"></div>
+          @else
+            @if(!isUpdateKill)
+              <button type="submit" class="start button button-white delay-6s">Start</button>
+            @endif
+          @endif
+        </form>
+      @endif
+
+
+      @if(!startedAt && !isUpdateKill && isKillOwner)
+        <a href="?updateKill=1" class="start delay-6s button button-white">Modify kill</a>
+      @endif
+
+      @if(!startedAt && killers && killers.length > 0)
+          <div class="margin-3rem"></div>
+          <div class="css-typing-hidden">
+            Ready to kill:
+          </div>
+          <div class="css-typing sm"></div>
+          @each(killer in killers)
+            <div class="margin-1rem"></div>
+            @if(killer == username)
+              <div class="css-typing-hidden">
+                {{killer}}
+              </div>
+              <div class="css-typing sm underlined"></div>
+            @else
+              <div class="css-typing-hidden">
+                {{killer}}
+              </div>
+              <div class="css-typing sm"></div>
+            @endif
+          @endeach
+          <div class="margin-3rem"></div>
+      @endif
+
+    @endif
+    <!-- End Game Part -->
   </div>
 
-  @endif
-  <!-- End Game Part -->
-
-
-  @if(!game)
-    <div class="container">
-      <div class="section">
-
-        <div class="row">
-          <div class="col s12 center">
-            <h3><i class="mdi-content-send brown-text"></i></h3>
-            <h4></h4>
-            <p class="left-align light">A l'origine, il est nécessaire d'avoir un maitre du jeu se chargeant d'établir un cycle d'attribution des kills. 
-          Cela afin d'éviter d'obtenir plusieurs boucles dans le cas d'un tirage au sort totalement aléatoire, comme décrite ci dessus.
-          Le rôle du maitre du jeu s'arrète ici, il ne participe pas à la partie car il en sait déjà trop...</p>
-          <p class="left-align light"> C'est pour pallier à ce problème que nous avons décidé d'implémenter un algorithme de répartition permettant d'obtenir un cycle unique aléatoire.
-          L'appli prend le rôle de maitre du jeu et personne n'est laissé de coté.</p>
-          <p class="left-align light">La répartition se fait selon les charactéristiques suivantes:</br>
-            - Un joueur ne peut pas obtenir son propre kill.</br>
-            - Un joueur ne peut pas killer une victime avec le kill de cette dernière.</br></br>
-          Attention, c'est le cas uniquement au 1er tour. Après quelques kills vous tomberez forcèment dans ce cas de figure.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    @endif
-
-
-  @if(!game)
-    <div id="index-banner" class="parallax-container valign-wrapper">
-      <div class="section no-pad-bot">
-        <div class="container">
-          <h1 class="header center blue-grey-text text-lighten-2">Jeu du Killer</h1>
-          <div class="row center">
-            <h5 class="header col s12 light">Jouer au killer sans maitre du jeu</h5>
-            <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
-              {{ csrfField() }}
-              <button id="download-button" type="submit" class="btn-large waves-effect waves-light blue-grey darken-3">Commencer</button>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="parallax"><img src="/images/assassin_{{backgroundImg}}.jpg" alt="Killer"></div>
-    </div>
-  @endif
-
-  <footer class="page-footer" style="background-color:#32333f!important">
-    <div class="container">
-      <div class="row center">
-        <style>.bmc-button img{height: 34px !important;width: 35px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{padding: 7px 15px 7px 10px !important;line-height: 35px !important;height:51px !important;text-decoration: none !important;display:inline-flex !important;color:#000000 !important;background-color:#FFFFFF !important;border-radius: 5px !important;border: 1px solid transparent !important;padding: 7px 15px 7px 10px !important;font-size: 22px !important;letter-spacing: 0.6px !important;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Cookie', cursive !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#000000 !important;}</style><link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/TheKiller"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a beer"><span style="margin-left:5px;font-size:28px !important;">Buy me a beer</span></a>
-      </div>
-      <div class="row center">
-        <div class="col s12">
-          <p class="white-text underlined text-lighten-4">Released under the MIT License.</p>
-          <a href="https://github.com/NkxxkN/2killer" class="white-text text-lighten-4">
-            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container center">
-        Copyright © 2020-<script>document.write((new Date()).getFullYear())</script> Kevin Antoine
-      </div>
-    </div>
-  </footer>
 
   <!--  Scripts-->
+
+  
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="/js/materialize.min.js"></script>
-  <script src="/js/init.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/drift.js"></script>
   </body>

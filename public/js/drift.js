@@ -20,15 +20,4 @@
     }
 }();
 drift.SNIPPET_VERSION = '0.3.1';
-drift.load('z75nz899he2e');
-drift.on('ready',function(api){
-    // hide the widget when it first loads
-    console.log('Should Hide Drift');
-    api.widget.hide();
-    window.contact = function () {
-        api.openChat();
-        $(document).ready(function(){
-            // $('.nav').sidenav().close();
-        });
-    };
-});
+setTimeout(() => drift.load('z75nz899he2e'), 10000); // wait 10 sec before loading drift.

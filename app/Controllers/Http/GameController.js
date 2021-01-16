@@ -3,11 +3,7 @@ const User = use('App/Models/User')
 const Game = use('App/Models/Game')
 const Kill = use('App/Models/Kill')
 const _ = use('underscore');
-const {getRandomInt} = require('../../../utils/misc.js')
-
 const BASE_URL = process.env.BASE_URL;
-const BACKGROUND_IMG_NB = 5;
-
 
 class GameController {
     async store ({request, response, auth}) {
@@ -65,14 +61,12 @@ class GameController {
 
     async index ({params , auth, request, view}) {
         const killSuggestion = await getKillSuggestion();
-        const backgroundImg = getRandomInt(BACKGROUND_IMG_NB) + 1;
 
         // No game.
         if (!params.encrypted) {
             return view.render('welcome', {
                 username: auth.user.username,
                 killSuggestion,
-                backgroundImg
             })
         }
         // Otherwise, load existing Game data.
@@ -106,7 +100,6 @@ class GameController {
             isUpdateKill,
             isSuggestKill,
             killSuggestion,
-            backgroundImg
         })
     }
 
@@ -114,7 +107,7 @@ class GameController {
         const killData = request.only(['description'])
         await Kill.create(killData);
         const game = await Game.find(request.body.game_id)
-        
+        console.log("redirect to game.encrypt", game, game.encrypt());
         return response.redirect(`/g/${game.encrypt()}`)
     }
 }
