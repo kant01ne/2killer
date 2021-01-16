@@ -157,15 +157,21 @@ input[type="submit"]{
   animation: 8s fadeIn;
 }
 
-a {
-  color: white;
-  text-decoration: underline;
+.delay-18s {
+  animation-fill-mode: forwards;
+  animation: 28s fadeIn;
 }
 
 .delay-28s {
   animation-fill-mode: forwards;
   animation: 28s fadeIn;
 }
+
+a {
+  color: white;
+  text-decoration: underline;
+}
+
 
 #copied {
   display:none;

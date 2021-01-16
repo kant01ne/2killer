@@ -82,22 +82,26 @@
 
       @if(startedAt && !ownKill)
 
-        <div class="css-typing-hidden">This game has already started. If you opened the link in a new tab or a new browser, your data will be inaccessible. Make sure to open this link from the same browser you used the first time.</div>
+        <div class="css-typing-hidden">This game has already begun.</div>
         <div class="css-typing"></div>
-
-        <div class="css-typing-hidden">If you would like to start a new game use the button below.</div>
+        <div class="margin-3rem"></div>
+        <div class="css-typing-hidden">If you opened the link in a new browser, your data will be inaccessible.</div>
         <div class="css-typing"></div>
-
+        <div class="margin-3rem"></div>
+        <div class="css-typing-hidden">Make sure to open this link from the same browser you used the first time. </div>
+        <div class="css-typing"></div>
+        <div class="margin-3rem"></div>
+        <div class="css-typing-hidden">If you would like to start a new game click on the button below: </div>
+        <div class="css-typing"></div>
+        
         <div class="start">
           <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
             {{ csrfField() }}
-            <button class="start button buttton-white delay-6s" type="submit">Start</button>
+            <button class="start button buttton-white delay-18s" type="submit">New</button>
           </form>
         </div>
 
-      @endif
-
-      @if(!isKillOwner || (isUpdateKill && !startedAt))
+      @elseif(!isKillOwner || (isUpdateKill && !startedAt))
         <div class="css-typing-hidden">
           Write your kill below:
         </div>
@@ -130,7 +134,7 @@
 
       @if(!isGameOwner && !startedAt)
           @if(killers.length < minPlayers)
-              <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)</div>
+              <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)...</div>
               <div class="css-typing sm"></div>
           @else
             @if(game)
@@ -145,7 +149,7 @@
           {{ csrfField() }}
           <input hidden name="id" value="{{ game.id }}"/>
           @if(killers.length < 3)
-            <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)</div>
+            <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)...</div>
             <div class="css-typing sm"></div>
           @else
             @if(!isUpdateKill)
