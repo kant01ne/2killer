@@ -11,7 +11,7 @@ class GameController {
             let game;
             // If existing game, fetch
             if (request.body.id)
-                game = await Game.find(request.body.id);
+                game = await Game.findFromEncrypted(request.body.id.toString());
     
             // Otherwise, save new game.
             if (!game) {
@@ -44,8 +44,8 @@ class GameController {
     }
 
     async start ({response, params}) {
-        const game = await Game.find(params.id)
-    
+        const game = await Game.findFromEncrypted(params.id.toString());
+        
         if (!game.started_at)
             await game.start();
         console.log(game.getEncrypted());
@@ -106,8 +106,7 @@ class GameController {
     async suggestKill ({response, request}) {
         const killData = request.only(['description'])
         await Kill.create(killData);
-        const game = await Game.find(request.body.game_id)
-        console.log("redirect to game.encrypt", game, game.encrypt());
+        const game = await Game.findFromEncrypted(request.body.game_id.toString());
         return response.redirect(`/g/${game.encrypt()}`)
     }
 }

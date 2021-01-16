@@ -1,9 +1,5 @@
 # Killer Role Play Game
 
-![img1.png](https://raw.githubusercontent.com/NkxxkN/2killer/master/img1.png)
-
-![img2.png](https://raw.githubusercontent.com/NkxxkN/2killer/master/img2.png)
-
 ## Setup
 
 ```bash

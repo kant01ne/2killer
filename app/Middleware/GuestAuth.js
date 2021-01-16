@@ -18,6 +18,11 @@ class GuestAuth {
       console.log('generating new user for', session._sessionId);
       const user = await User.findOrCreate({sessionId: session._sessionId})
       await auth.remember(true).login(user);
+      if (!request.body.username)
+        return await next()
+
+      auth.user.username = request.body.username
+      await auth.user.save()
     }
     await next()
 

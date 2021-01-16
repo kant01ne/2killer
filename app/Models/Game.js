@@ -65,7 +65,7 @@ class Game extends Model {
             console.log('----New Assignment-----');
 
             // Assign killers and victims to kills.
-            await Promise.all(kills.map((kill, i) => {
+            await Promise.all(kills.map((_, i) => {
                 const victimId = (i + players.length + victimStep) % players.length;
                 const killerId = (i + players.length + killerStep) % players.length;
                 console.log(i, killerStep, victimStep, killerId, victimId)

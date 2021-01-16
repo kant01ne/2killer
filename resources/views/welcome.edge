@@ -20,7 +20,7 @@
         <form autocomplete="off" class="form" action="{{ route('game.new') }}" method="POST">
           {{ csrfField() }}
           <div class="css-typing-hidden">
-            Do you have what it takes to kill all of your friends ?
+            Have you ever dreamed of killing your friends?
          </div>
          <div class="css-typing"></div>
           <button id="start" type="submit" class="delay-8s start button button-white">Start</button>
@@ -72,7 +72,7 @@
               <label class="label" for="description">Suggestion</label>
           </div>
           {{ csrfField() }}
-          <input hidden name="game_id" value="{{ game.id }}"/>
+          <input hidden name="game_id" value="{{ game.encrypted }}"/>
           <button class="start button button-white delay-6s" type="submit" name="action">Send
           </button>  
         </form>
@@ -117,7 +117,7 @@
             </div>
 
             {{ csrfField() }}
-            <input hidden name="id" value="{{ game.id }}"/>
+            <input hidden name="id" value="{{ game.encrypted }}"/>
             <input hidden name="kill_id" value="{{ ownKill && ownKill.id }}"/>
 
             @if(isUpdateKill)
@@ -143,9 +143,9 @@
       @endif
 
       @if(isGameOwner && !startedAt)
-        <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.id}) }}" method="POST">
+        <form autocomplete="off" class="form" action="{{ route('game.start', {id: game.encrypted}) }}" method="POST">
           {{ csrfField() }}
-          <input hidden name="id" value="{{ game.id }}"/>
+          <input hidden name="id" value="{{ game.encrypted }}"/>
           @if(killers.length < 3)
             <div class="css-typing-hidden">Waiting for at least {{minPlayers - killers.length}} other player(s)...</div>
             <div class="css-typing sm"></div>

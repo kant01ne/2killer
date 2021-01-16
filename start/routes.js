@@ -23,9 +23,6 @@ const Kill = use('App/Models/Kill')
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env')
 
-const {bgColors, getRandomItem} = require('../utils/misc.js')
-
-
 /**
  * App
  */
