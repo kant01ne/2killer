@@ -1,10 +1,20 @@
-const copyClipboardElement = document.getElementById("copyButton");
+const copyButton = document.getElementById("copyButton");
 
-if (copyClipboardElement) {
-    copyClipboardElement.addEventListener("click", function() {
+if (copyButton) {
+    copyButton.addEventListener("click", function() {
         copyToClipboard(document.getElementById("copyTarget"));
     });
 }
+
+
+const copyButton2 = document.getElementById("copyButton2");
+
+if (copyButton2) {
+    copyButton2.addEventListener("click", function() {
+        copyToClipboard(document.getElementById("copyTarget2"));
+    });
+}
+
 
 function copyToClipboard(elem) {
 	  // create hidden text element, if it doesn't already exist
@@ -54,7 +64,7 @@ function copyToClipboard(elem) {
         target.textContent = "";
     }
     document.getElementById("copied").style["display"] = "flex";
-    setTimeout(() => document.getElementById("copied").style["display"] = "none", 5000);
+    setTimeout(() => document.getElementById("copied").style["display"] = "none", 2000);
     return succeed;
 }
 

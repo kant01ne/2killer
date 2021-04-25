@@ -59,7 +59,7 @@ class GameController {
         return response.redirect(`/g/${game.encrypt()}`)
     }
 
-    async index ({params , auth, request, view}) {
+    async index ({params , auth, request, view, session}) {
         const killSuggestion = await getKillSuggestion();
 
         // No game.
@@ -80,7 +80,6 @@ class GameController {
         const victim = kill ? await User.find(kill.victim_id) : null;
         
 
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(request.headers()['user-agent']);
         const isUpdateKill =  request._qs && request._qs.updateKill;
         const isSuggestKill =  request._qs && request._qs.suggestKill;
 
@@ -90,13 +89,13 @@ class GameController {
             minPlayers: Game.minPlayers(),
             killers: killers.map(k => k.username),
             link: `${BASE_URL}${request.url()}`,
+            portableLink: `${BASE_URL}${request.url()}?sess=${session.get('userId')}`,
             isGameOwner: game.user_id === auth.user.id,
             startedAt: game.started_at,
             victim,
             isKillOwner,
             kill,
             ownKill,
-            isMobile,
             isUpdateKill,
             isSuggestKill,
             killSuggestion,
